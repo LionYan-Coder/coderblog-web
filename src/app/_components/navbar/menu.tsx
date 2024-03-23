@@ -1,6 +1,6 @@
 'use client';
 
-import { useAppContext } from '@/app/hooks/useAppContext';
+import { useAppContext } from '@/app/_lib/hooks/useAppContext';
 import classNames from 'classnames';
 import Switch from './switch';
 const menus = ['Blog', 'Projects', 'About', 'Newsletter'];
