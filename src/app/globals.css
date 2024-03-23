@@ -17,13 +17,12 @@
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  background-color: rgb(239 241 246)
+}
+
+body.noscroll {
+  overflow: hidden;
+  height: 100%
 }
 
 @layer utilities {
