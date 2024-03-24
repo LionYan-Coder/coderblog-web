@@ -25,6 +25,12 @@ body.noscroll {
   height: 100%
 }
 
+@layer base {
+  h4 {
+    @apply text-2xl font-semibold;
+  }
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
