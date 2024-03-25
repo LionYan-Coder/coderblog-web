@@ -1,20 +1,13 @@
-import { CSSProperties } from 'react';
-
-interface Props {
-	className?: string;
-	style?: CSSProperties;
-}
-
-function IconMenuTrigger(props: Props) {
+function IconMenuTrigger(props: IconProps) {
 	return (
 		<svg width="1em" height="1em" viewBox="0 0 18 18" {...props}>
 			<polyline
 				id="globalnav-menutrigger-bread-bottom"
 				fill="none"
 				stroke="currentColor"
-				stroke-width="1.2"
-				stroke-linecap="round"
-				stroke-linejoin="round"
+				strokeWidth="1.2"
+				strokeLinecap="round"
+				strokeLinejoin="round"
 				points="2 12, 16 12"
 			>
 				<animate
@@ -44,9 +37,9 @@ function IconMenuTrigger(props: Props) {
 				id="globalnav-menutrigger-bread-top"
 				fill="none"
 				stroke="currentColor"
-				stroke-width="1.2"
-				stroke-linecap="round"
-				stroke-linejoin="round"
+				strokeWidth="1.2"
+				strokeLinecap="round"
+				strokeLinejoin="round"
 				points="2 5, 16 5"
 			>
 				<animate

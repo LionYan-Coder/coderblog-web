@@ -1,10 +1,4 @@
-import { CSSProperties } from 'react';
-
-interface Props {
-	className?: string;
-	style?: CSSProperties;
-}
-export default function ArrowUpRightIcon(props: Props) {
+export default function ArrowUpRightIcon(props: IconProps) {
 	return (
 		<svg
 			width="1em"

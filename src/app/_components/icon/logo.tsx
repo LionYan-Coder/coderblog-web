@@ -1,11 +1,4 @@
-import { CSSProperties } from 'react';
-
-interface Props {
-	className?: string;
-	style?: CSSProperties;
-}
-
-function IconLogo(props: Props) {
+function IconLogo(props: IconProps) {
 	return (
 		<svg
 			width="1em"

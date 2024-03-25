@@ -1,11 +1,4 @@
-import { CSSProperties } from 'react';
-
-interface Props {
-	className?: string;
-	style?: CSSProperties;
-}
-
-export default function AppleIcon(props: Props) {
+export default function AppleIcon(props: IconProps) {
 	return (
 		<svg
 			height="44"

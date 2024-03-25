@@ -11,8 +11,6 @@ async function fetchCurrentMonthBanner() {
 	if (code !== EResponseCode.success) {
 		throw new Error(message);
 	}
-	console.log('banner data', data);
-
 	return data;
 }
 
@@ -28,6 +26,7 @@ export default async function Banner() {
 					style={{ objectFit: 'cover' }}
 					sizes="100vw"
 					fill
+					priority
 				/>
 				<div className="w-full text-white absolute top-1/2 transform -trnaslate-y-1/2 p-4">
 					<p className="text-center text-4xl mb-4">{banner.title}</p>
