@@ -38,6 +38,9 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         id: pnpm-install
+        with:
+          version: 8
+          run_install: true
       - name: Install dependencies
         run: pnpm install
       - name: Build with Next.js
