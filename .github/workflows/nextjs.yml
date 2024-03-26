@@ -29,8 +29,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      API_URL: ${{ vars.TEST_API_URL }}
-      TOKEN: ${{ vars.TEST_TOKEN }}
+      API_URL: ${{ vars.API_URL }}
+      TOKEN: ${{ vars.GIT_TOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
