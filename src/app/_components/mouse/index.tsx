@@ -1,5 +1,5 @@
 import { AppleIcon } from '../icon';
-import './index.scss';
+import './index.css';
 export default function Mouse() {
 	return (
 		<div className="mouse" aria-hidden="true">

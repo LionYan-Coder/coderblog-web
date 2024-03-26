@@ -2,7 +2,6 @@
 
 import { useAppContext } from '@/app/_lib/hooks/useAppContext';
 import classNames from 'classnames';
-import Switch from './switch';
 const menus = ['Blog', 'Projects', 'About', 'Newsletter'];
 function Menu() {
 	const { menuTriggerActive, theme, setTheme } = useAppContext();
@@ -51,12 +50,7 @@ function Menu() {
 						transitionTimingFunction:
 							'cubic-bezier(.4,0,.6,1), cubic-bezier(.4,0,.6,1), step-start'
 					}}
-				>
-					<Switch
-						onClick={() => setTheme(theme === 'day' ? 'nigth' : 'day')}
-						night={theme === 'nigth'}
-					/>
-				</li>
+				></li>
 			</ul>
 		</div>
 	);
