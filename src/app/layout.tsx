@@ -1,10 +1,7 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
 import './globals.css';
-import Navbar from './_components/navbar';
-import { AppStateProvider } from './_lib/hooks/useAppContext';
-
-const inter = Inter({ subsets: ['latin'] });
+import { sansFont } from '~/lib/font';
+import { ThemeProvider } from '~/provider/theme';
 
 export const metadata: Metadata = {
 	title: 'Create Next App',
@@ -17,12 +14,15 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="en" className="text-neutral-900">
-			<body className={inter.className}>
-				<AppStateProvider>
-					<Navbar />
-					<main>{children}</main>
-				</AppStateProvider>
+		<html
+			lang="zh-CN"
+			className={`${sansFont.variable} m-0 p-0 h-full font-sans antialiased`}
+			suppressHydrationWarning
+		>
+			<body className="flex h-full flex-col">
+				<ThemeProvider defaultTheme="system" attribute="class" enableSystem>
+					{children}
+				</ThemeProvider>
 			</body>
 		</html>
 	);
