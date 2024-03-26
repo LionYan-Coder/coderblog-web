@@ -47,8 +47,5 @@ jobs:
           run_install: true
       - name: Install dependencies
         run: pnpm install
-      - name: print environment variables
-        run: |
-          echo "variable url : $API_URL"
       - name: Build with Next.js
         run: pnpm next build
