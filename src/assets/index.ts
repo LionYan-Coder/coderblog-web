@@ -13,3 +13,8 @@ export { UserArrowLeftIcon } from './icons/UserArrowLeftIcon';
 export { UserSecurityIcon } from './icons/UserSecurityIcon';
 export { MoonIcon } from './icons/MoonIcon';
 export { SunIcon } from './icons/SunIcon';
+export { XIcon } from './icons/XIcon';
+export { GitHubBrandIcon } from './icons/GitHubBrandIcon';
+export { GitHubIcon } from './icons/GitHubIcon';
+export { GoogleBrandIcon } from './icons/GoogleBrandIcon';
+export { ArrowDoubleRightIcon } from './icons/ArrowDoubleRightIcon';

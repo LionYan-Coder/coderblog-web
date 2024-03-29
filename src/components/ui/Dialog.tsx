@@ -5,7 +5,6 @@ import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { Cross2Icon } from '@radix-ui/react-icons';
 
 import { cn } from '~/lib/utils';
-import clsx from 'clsx';
 const { Root, Trigger } = DialogPrimitive;
 
 const DialogPortal = ({
@@ -26,7 +25,7 @@ const DialogOverlay = React.forwardRef<
 >(({ className, ...props }, ref) => (
 	<DialogPrimitive.Overlay
 		ref={ref}
-		className={clsx(
+		className={cn(
 			`bg-zinc-800/40 dark:bg-black/80 
        fixed inset-0 z-50 backdrop-blur
        data-[state=open]:animate-in
@@ -65,7 +64,7 @@ const DialogContent = React.forwardRef<
 			{children}
 			<DialogPrimitive.Close className="absolute right-4 top-8 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
 				<Cross2Icon className="h-5 w-5 text-zinc-800 dark:text-zinc-200" />
-				<span className="sr-only">Close</span>
+				<span className="sr-only">关闭</span>
 			</DialogPrimitive.Close>
 		</DialogPrimitive.Content>
 	</DialogPortal>
