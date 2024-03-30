@@ -9,7 +9,7 @@ import { cn } from '~/lib/utils';
 const menus = [
 	{ label: '首页', link: '/' },
 	{ label: '博客', link: '/blog' },
-	{ label: '杂记', link: '/blog' },
+	{ label: '杂记', link: '/blog2' },
 	{ label: '留言墙', link: '/message' }
 ];
 
@@ -18,7 +18,9 @@ function MobileNav({ className }: { className?: string }) {
 	return (
 		<Dialog.Root open={dialogOpen} onOpenChange={setDialogOpen}>
 			<Dialog.Trigger asChild>
-				<button
+				<motion.button
+					initial={{ opacity: 0, y: -15 }}
+					animate={{ opacity: 1, y: 0 }}
 					className={cn(
 						'group flex items-center rounded-full bg-gradient-to-b from-zinc-50/20 to-white/80 px-4 py-2 text-sm font-medium text-zinc-800 shadow-lg shadow-zinc-800/5 ring-1 ring-zinc-900/5 backdrop-blur-md focus:outline-none focus-visible:ring-2 dark:from-zinc-900/30 dark:to-zinc-800/80 dark:text-zinc-200 dark:ring-white/10 dark:hover:ring-white/20 dark:focus-visible:ring-yellow-500/80',
 						className
@@ -40,7 +42,7 @@ function MobileNav({ className }: { className?: string }) {
 							strokeLinejoin="round"
 						/>
 					</svg>
-				</button>
+				</motion.button>
 			</Dialog.Trigger>
 
 			<Dialog.Content className="top-8 inset-4 bottom-auto p-8 rounded-3xl bg-gradient-to-b from-zinc-100/75 to-white ring-1 ring-zinc-900/5 dark:from-zinc-900/50 dark:to-zinc-900 dark:ring-zinc-800">
@@ -81,7 +83,9 @@ function DesktopNav({ className }: { className?: string }) {
 	const background = useMotionTemplate`radial-gradient(${radius}px circle at ${mouseX}px ${mouseY}px, var(--spotlight-color) 0%, transparent 65%)`;
 
 	return (
-		<nav
+		<motion.nav
+			initial={{ opacity: 0, y: -15 }}
+			animate={{ opacity: 1, y: 0 }}
 			onMouseMove={handleMouseMove}
 			className={cn(
 				`group relative 
@@ -104,7 +108,7 @@ function DesktopNav({ className }: { className?: string }) {
 					</NavItem>
 				))}
 			</ul>
-		</nav>
+		</motion.nav>
 	);
 }
 

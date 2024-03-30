@@ -9,8 +9,13 @@ import {
 	GoogleBrandIcon,
 	ArrowDoubleRightIcon
 } from '~/assets';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useState } from 'react';
+import {
+	motion,
+	AnimatePresence,
+	useMotionValue,
+	useMotionTemplate
+} from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
 import { useTheme } from 'next-themes';
 import {
 	Button,
@@ -23,32 +28,248 @@ import {
 } from '~/components/ui';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { Navigation } from './Navigation';
-import { domain } from '~/config/constants';
 import Image from 'next/image';
 import Link from 'next/link';
-export default function Header() {
+import { GITHUB, domain } from '~/config/constants';
+import { usePathname } from 'next/navigation';
+import { cn } from '~/lib/utils';
+import { clamp } from '~/lib/math';
+
+const fromScale = 1;
+const toScale = 36 / 64;
+const fromX = 0;
+const toX = 2 / 16;
+export function Header() {
+	const isHomePage = usePathname() === '/';
+	const headerRef = useRef<HTMLDivElement>(null);
+	const avatarRef = useRef<HTMLDivElement>(null);
+	const avatarScale = useMotionValue(1);
+	const avatarX = useMotionValue(0);
+	const avatarBorderX = useMotionValue(0);
+	const avatarBorderScale = useMotionValue(1);
+	const isInitial = useRef(true);
+	useEffect(() => {
+		const initial_avatar_offset = avatarRef.current?.offsetTop ?? 0;
+		const upDelay = 64;
+		function setProperty(property: string, value: string | null) {
+			document.documentElement.style.setProperty(property, value);
+		}
+
+		function removeProperty(property: string) {
+			document.documentElement.style.removeProperty(property);
+		}
+
+		function updateHeaderStyles() {
+			if (!headerRef.current) {
+				return;
+			}
+
+			const { top, height } = headerRef.current.getBoundingClientRect();
+			const scrollY = clamp(
+				window.scrollY,
+				0,
+				document.body.scrollHeight - window.innerHeight
+			);
+			if (isInitial.current) {
+				setProperty('--header-position', 'sticky');
+			}
+
+			setProperty('--content-offset', `${initial_avatar_offset}px`);
+			if (isInitial.current || scrollY < initial_avatar_offset) {
+				setProperty('--header-height', `${initial_avatar_offset + height}px`);
+				setProperty('--header-mb', `${-initial_avatar_offset}px`);
+			} else if (top + height < -upDelay) {
+				const offset = Math.max(height, scrollY - upDelay);
+				setProperty('--header-height', `${offset}px`);
+				setProperty('--header-mb', `${height - offset}px`);
+			} else if (top === 0) {
+				setProperty('--header-height', `${scrollY + height}px`);
+				setProperty('--header-mb', `${-scrollY}px`);
+			}
+
+			if (top === 0 && scrollY > 0 && scrollY >= initial_avatar_offset) {
+				setProperty('--header-inner-position', 'fixed');
+				removeProperty('--header-top');
+				removeProperty('--avatar-top');
+			} else {
+				removeProperty('--header-inner-position');
+				setProperty('--header-top', '0px');
+				setProperty('--avatar-top', '0px');
+			}
+		}
+
+		function updateAvatarStyle() {
+			if (!isHomePage) {
+				return;
+			}
+
+			let scrollY = initial_avatar_offset - window.scrollY;
+			let scale =
+				(scrollY * (fromScale - toScale)) / initial_avatar_offset + toScale;
+			scale = clamp(scale, fromScale, toScale);
+			let x = (scrollY * (fromX - toX)) / initial_avatar_offset + toX;
+			x = clamp(x, fromX, toX);
+			avatarScale.set(scale);
+			avatarX.set(x);
+
+			const borderScale = 1 / (toScale / scale);
+
+			avatarBorderX.set((-toX + x) * borderScale);
+			avatarBorderScale.set(borderScale);
+			setProperty('--avatar-border-opacity', scale === toScale ? '1' : '0');
+		}
+
+		function updateStyles() {
+			updateHeaderStyles();
+			updateAvatarStyle();
+			isInitial.current = false;
+		}
+		updateStyles();
+
+		window.addEventListener('scroll', updateStyles, { passive: true });
+		window.addEventListener('resize', updateStyles);
+
+		return () => {
+			window.removeEventListener('scroll', updateStyles);
+			window.removeEventListener('resize', updateStyles);
+		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [isHomePage]);
+
+	const avatarTransform = useMotionTemplate`translate3d(${avatarX}rem, 0, 0) scale(${avatarScale})`;
+	const avatarBorderTransform = useMotionTemplate`translate3d(${avatarBorderX}rem, 0, 0) scale(${avatarBorderScale})`;
 	return (
-		<header className="relative w-full z-50">
-			<div className="sticky top-0 h-16 pt-6">
-				<Container>
-					<div className="flex gap-4">
-						<div className="flex-1 flex"></div>
-						<div className="flex-1 flex justify-end md:justify-center">
-							<Navigation.Mobile className="pointer-events-auto relative z-50 md:hidden" />
-							<Navigation.Desktop className="pointer-events-auto relative z-50 hidden md:block" />
+		<>
+			<motion.header
+				className={cn(
+					'relative w-full z-50 flex flex-col mb-[var(--header-mb,0px)]',
+					isHomePage
+						? 'h-[var(--header-height,180px)]'
+						: 'h-[var(--header-height,64px)]'
+				)}
+				layout
+				layoutRoot
+			>
+				<AnimatePresence>
+					{isHomePage && (
+						<>
+							<div
+								ref={avatarRef}
+								className="order-last mt-[calc(theme(spacing.32)-theme(spacing.3))]"
+							/>
+							<Container
+								className="top-0 -mb-3 order-last pt-3"
+								style={{
+									position:
+										'var(--header-position)' as React.CSSProperties['position']
+								}}
+							>
+								<motion.div
+									initial={{ opacity: 0, y: 15 }}
+									animate={{ opacity: 1, y: 0 }}
+									transition={{
+										type: 'spring',
+										damping: 30,
+										stiffness: 200
+									}}
+									className="top-[var(--avatar-top,theme(spacing.3))] w-full"
+									style={{
+										position:
+											'var(--header-inner-position)' as React.CSSProperties['position']
+									}}
+								>
+									<motion.div
+										layout
+										layoutId="avatar"
+										className="relative inline-flex"
+									>
+										<motion.div
+											className="absolute left-0 mt-3 origin-left opacity-[var(--avatar-border-opacity,0)] transition-opacity"
+											style={{
+												transform: avatarBorderTransform
+											}}
+										>
+											<div className="h-10 w-10 rounded-full bg-white/90 p-0.5 shadow-lg shadow-zinc-800/5 ring-1 ring-zinc-900/5 backdrop-blur dark:bg-zinc-800/90 dark:ring-white/10"></div>
+										</motion.div>
+										<motion.div
+											className="h-16 w-16 origin-left block relative"
+											style={{ transform: avatarTransform }}
+										>
+											<Image
+												className="rounded-full bg-zinc-100 object-cover dark:bg-zinc-800 w-full h-full"
+												src={GITHUB.DEFAULLT_AVATAR}
+												alt={GITHUB.DEFAULLT_NAME}
+												width={64}
+												height={64}
+											></Image>
+										</motion.div>
+									</motion.div>
+								</motion.div>
+							</Container>
+						</>
+					)}
+				</AnimatePresence>
+
+				<div
+					ref={headerRef}
+					className="top-0 h-16 pt-6"
+					style={{
+						position:
+							'var(--header-position)' as React.CSSProperties['position']
+					}}
+				>
+					<Container
+						className="top-[var(--header-top,theme(spacing.6))] w-full"
+						style={{
+							position:
+								'var(--header-inner-position)' as React.CSSProperties['position']
+						}}
+					>
+						<div className="relative flex gap-4">
+							<div className="flex-1 flex">
+								<motion.div
+									className="flex flex-1"
+									initial={{ opacity: 0, y: 15 }}
+									animate={{ opacity: 1, y: 0 }}
+									transition={{
+										type: 'spring',
+										damping: 30,
+										stiffness: 200
+									}}
+								>
+									<AnimatePresence>
+										{!isHomePage && (
+											<motion.div className="relative" layoutId="avatar" layout>
+												<Image
+													className="rounded-full bg-zinc-100 object-cover dark:bg-zinc-800 w-full h-full"
+													src={GITHUB.DEFAULLT_AVATAR}
+													alt={GITHUB.DEFAULLT_NAME}
+													width={64}
+													height={64}
+												></Image>
+											</motion.div>
+										)}
+									</AnimatePresence>
+								</motion.div>
+							</div>
+							<div className="flex-1 flex justify-end md:justify-center">
+								<Navigation.Mobile className="pointer-events-auto relative z-50 md:hidden" />
+								<Navigation.Desktop className="pointer-events-auto relative z-50 hidden md:block" />
+							</div>
+							<div className="flex gap-3 justify-end md:flex-1">
+								<UserSignInButton />
+								<ThemeSwither />
+							</div>
 						</div>
-						<div className="flex gap-3 justify-end md:flex-1">
-							<User />
-							<ThemeSwither />
-						</div>
-					</div>
-				</Container>
-			</div>
-		</header>
+					</Container>
+				</div>
+			</motion.header>
+			{isHomePage && <div className="h-[--content-offset]" />}
+		</>
 	);
 }
 
-function User() {
+function UserSignInButton() {
 	const [tooltipOpen, setTooltipOpen] = useState(false);
 	const [dialogOpen, setDialogOpen] = useState(false);
 	return (
@@ -57,13 +278,16 @@ function User() {
 				<Tooltip.Root open={tooltipOpen} onOpenChange={setTooltipOpen}>
 					<Tooltip.Trigger asChild>
 						<Dialog.Trigger asChild>
-							<button
+							<motion.button
+								initial={{ opacity: 0, y: -15 }}
+								animate={{ opacity: 1, y: 0 }}
+								transition={{ delay: 0.1 }}
 								className="group h-10 flex items-center rounded-full bg-gradient-to-b from-zinc-50/20 to-white/80 px-3 text-xl font-medium text-zinc-800 shadow-lg shadow-zinc-800/5 ring-1 ring-zinc-900/5 backdrop-blur-md focus:outline-none focus-visible:ring-2 dark:from-zinc-900/30 dark:to-zinc-800/80 dark:text-zinc-200 dark:ring-white/10 dark:hover:ring-white/20 dark:focus-visible:ring-yellow-500/80"
 								aria-expanded={false}
 								type="button"
 							>
 								<UserArrowLeftIcon />
-							</button>
+							</motion.button>
 						</Dialog.Trigger>
 					</Tooltip.Trigger>
 
@@ -189,7 +413,10 @@ function ThemeSwither() {
 		<Tooltip.Provider delayDuration={400}>
 			<Tooltip.Root open={tooltipOpen} onOpenChange={setTooltipOpen}>
 				<Tooltip.Trigger asChild>
-					<button
+					<motion.button
+						initial={{ opacity: 0, y: -15 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{ delay: 0.2 }}
 						className="group h-10 flex  items-center rounded-full bg-gradient-to-b from-zinc-50/20 to-white/80 px-3 text-xl font-medium text-zinc-800 shadow-lg shadow-zinc-800/5 ring-1 ring-zinc-900/5 backdrop-blur-md focus:outline-none focus-visible:ring-2 dark:from-zinc-900/30 dark:to-zinc-800/80 dark:text-zinc-200 dark:ring-white/10 dark:hover:ring-white/20 dark:focus-visible:ring-yellow-500/80"
 						aria-expanded={false}
 						type="button"
@@ -199,7 +426,7 @@ function ThemeSwither() {
 							{theme === 'dark' ? (
 								<motion.div
 									key="moon"
-									initial={{ opacity: 0, translateY: 25 }}
+									initial={{ opacity: 0, translateY: 15 }}
 									animate={{ opacity: 1, translateY: 0 }}
 									exit={{ opacity: 0, translateY: -20 }}
 								>
@@ -208,7 +435,7 @@ function ThemeSwither() {
 							) : (
 								<motion.div
 									key="sun"
-									initial={{ opacity: 0, translateY: 25 }}
+									initial={{ opacity: 0, translateY: 15 }}
 									animate={{ opacity: 1, translateY: 0 }}
 									exit={{ opacity: 0, translateY: -20 }}
 								>
@@ -216,7 +443,7 @@ function ThemeSwither() {
 								</motion.div>
 							)}
 						</AnimatePresence>
-					</button>
+					</motion.button>
 				</Tooltip.Trigger>
 
 				<AnimatePresence>

@@ -10,7 +10,8 @@ const variants = {
 		opacity: 1,
 		transition: {
 			type: 'spring',
-			staggerChildren: 0.3
+			// duration: 0.1,
+			staggerChildren: 0.2
 		}
 	}
 };
@@ -28,7 +29,7 @@ export default function Resume() {
 			variants={variants}
 			initial="initial"
 			animate="animate"
-			className="relative w-full h-[calc(100vh-64px)] grid gap-3 place-content-center text-2xl"
+			className="relative w-full flex flex-col gap-4 pt-10 text-2xl h-[calc(100vh-var(--header-height))]"
 		>
 			<motion.p variants={variantItm}>
 				你好，我是
@@ -76,7 +77,7 @@ export default function Resume() {
 					className="text-sm text-zinc-500 dark:text-zinc-200"
 					sequence={[
 						1200,
-						'写这个博客在这里记录我的学习与生活，并且分享有趣或者有用知识，努力成为更厉害的coder💪。'
+						'写这个博客在这里记录我的学习与生活，并且分享有趣或者有用知识。'
 					]}
 					speed={10}
 					repeat={Infinity}

@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import Header from './Header';
+import { Header } from './Header';
 
 export default function SiteLayout({ children }: { children: ReactNode }) {
 	return (
