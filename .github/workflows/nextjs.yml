@@ -39,13 +39,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
-        id: pnpm-install
-        with:
-          version: 8
-          run_install: true
+      - name: Install bun
+        uses: oven-sh/setup-bun@v1
+        id: bun-install
       - name: Install dependencies
-        run: pnpm install
+        run: bun install
       - name: Build with Next.js
-        run: pnpm next build
+        run: bun next build
