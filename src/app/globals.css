@@ -14,7 +14,7 @@ html.light {
   --bg-color: theme('colors.zinc.50');
 }
 html.dark {
-  --bg-color: theme('colors.primary.900');
+  --bg-color: theme('colors.black');
 }
 
 

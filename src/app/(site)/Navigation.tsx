@@ -4,14 +4,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useCallback, useState } from 'react';
 import { Dialog } from '~/components/ui';
+import { Navs } from '~/config/nav';
 import { cn } from '~/lib/utils';
-
-const menus = [
-	{ label: '首页', link: '/' },
-	{ label: '博客', link: '/blog' },
-	{ label: '杂记', link: '/blog2' },
-	{ label: '留言墙', link: '/message' }
-];
 
 function MobileNav({ className }: { className?: string }) {
 	const [dialogOpen, setDialogOpen] = useState(false);
@@ -53,10 +47,10 @@ function MobileNav({ className }: { className?: string }) {
 				</Dialog.Header>
 				<nav className="mt-4">
 					<ul className="divide-y text-base  text-zinc-800 dark:text-zinc-300 divide-zinc-500/20 flex flex-col">
-						{menus.map((menu) => (
-							<li key={menu.link}>
-								<Link href={menu.link} className="py-3 block">
-									{menu.label}
+						{Navs.map((nav) => (
+							<li key={nav.link}>
+								<Link href={nav.link} className="py-3 block">
+									{nav.label}
 								</Link>
 							</li>
 						))}
@@ -102,9 +96,9 @@ function DesktopNav({ className }: { className?: string }) {
 				aria-hidden="true"
 			/>
 			<ul className="flex px-3 dark:text-zinc-200 text-zinc-800 text-sm font-medium ">
-				{menus.map((menu) => (
-					<NavItem href={menu.link} key={menu.link}>
-						{menu.label}
+				{Navs.map((nav) => (
+					<NavItem href={nav.link} key={nav.link}>
+						{nav.label}
 					</NavItem>
 				))}
 			</ul>
@@ -127,8 +121,8 @@ function NavItem({
 				className={cn(
 					'relative px-3 py-2 block whitespace-nowrap',
 					isActive
-						? 'text-amber-600 dark:text-amber-400'
-						: 'hover:text-amber-600 dark:hover:text-amber-400'
+						? 'text-amber-800 dark:text-amber-600'
+						: 'hover:text-amber-800 dark:hover:text-amber-600'
 				)}
 			>
 				{children}
@@ -136,6 +130,7 @@ function NavItem({
 					<motion.span
 						className="absolute inset-x-1 -bottom-px h-px bg-gradient-to-r from-lime-700/0 via-amber-700/70 to-amber-700/0 dark:from-amber-400/0 dark:via-amber-400/40 dark:to-amber-400/0"
 						layoutId="active-nav-item"
+						layout
 					/>
 				)}
 			</Link>

@@ -239,14 +239,20 @@ export function Header() {
 								>
 									<AnimatePresence>
 										{!isHomePage && (
-											<motion.div className="relative" layoutId="avatar" layout>
-												<Image
-													className="rounded-full bg-zinc-100 object-cover dark:bg-zinc-800 w-full h-full"
-													src={GITHUB.DEFAULLT_AVATAR}
-													alt={GITHUB.DEFAULLT_NAME}
-													width={64}
-													height={64}
-												></Image>
+											<motion.div
+												className="relative inline-flex"
+												layoutId="avatar"
+												layout
+											>
+												<div className="h-10 w-10 rounded-full bg-white/90 p-0.5 shadow-lg shadow-zinc-800/5 ring-1 ring-zinc-900/5 backdrop-blur dark:bg-zinc-800/90 dark:ring-white/10">
+													<Image
+														className="rounded-full bg-zinc-100 object-cover dark:bg-zinc-800 w-full h-full"
+														src={GITHUB.DEFAULLT_AVATAR}
+														alt={GITHUB.DEFAULLT_NAME}
+														width={40}
+														height={40}
+													></Image>
+												</div>
 											</motion.div>
 										)}
 									</AnimatePresence>
@@ -439,7 +445,7 @@ function ThemeSwither() {
 									animate={{ opacity: 1, translateY: 0 }}
 									exit={{ opacity: 0, translateY: -20 }}
 								>
-									<SunIcon />
+									<SunIcon className="text-amber-800" />
 								</motion.div>
 							)}
 						</AnimatePresence>

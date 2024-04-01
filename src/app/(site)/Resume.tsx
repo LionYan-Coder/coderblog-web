@@ -53,23 +53,23 @@ export default function Resume() {
 					repeat={Infinity}
 				/>
 			</motion.p>
-			<motion.p variants={variantItm}>
+			<motion.p className="font-semibold" variants={variantItm}>
 				热爱编码，喜欢{' '}
-				<span className="text-[#294E80] font-semibold dark:drop-shadow-[0_0_0.3rem_#294E8070]">
-					TypeScript、
-				</span>{' '}
-				<span className="text-[#0871A4] font-semibold dark:drop-shadow-[0_0_0.3rem_#0871A470]">
+				<span className="text-[#0871A4]  dark:drop-shadow-[0_0_0.3rem_#0871A470]">
 					React、
 				</span>
-				<span className="text-[#42b883] font-semibold dark:drop-shadow-[0_0_0.3rem_#42b88370]">
+				<span className="text-[#42b883]  dark:drop-shadow-[0_0_0.3rem_#42b88370]">
 					Vue、
 				</span>{' '}
-				<span className="text-[#0468d7] font-semibold dark:drop-shadow-[0_0_0.3rem_#0468d770]">
-					Flutter
+				<span className="text-[#0468d7] dark:drop-shadow-[0_0_0.3rem_#0468d770]">
+					Flutter、
+				</span>
+				<span className="text-[#5dc9e2] dark:drop-shadow-[0_0_0.3rem_#5dc9e270]">
+					Go
 				</span>{' '}
 				和{' '}
-				<span className="text-[#5dc9e2] font-semibold dark:drop-shadow-[0_0_0.3rem_#5dc9e270]">
-					Go
+				<span className="text-[#a42] dark:drop-shadow-[0_0_0.3rem_#80331a70]">
+					Rust
 				</span>
 			</motion.p>
 			<motion.p variants={variantItm}>
