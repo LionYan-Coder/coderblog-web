@@ -1,10 +1,16 @@
+import FriendLink from './FriendLink';
+import RecentPost from './RecentPost';
 import Resume from './Resume';
 import { Container } from '~/components/ui';
 
-export default function Home() {
+export default function Home({ recent }: { recent: JSX.Element }) {
 	return (
 		<Container>
-			<Resume></Resume>
+			<Resume />
+			<div className="mx-auto mt-32 max-w-xl lg:max-w-none grid grid-cols-1 lg:grid-cols-2">
+				<RecentPost />
+				<FriendLink />
+			</div>
 		</Container>
 	);
 }
