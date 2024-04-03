@@ -10,7 +10,7 @@ export function ArrowDoubleRightIcon(props: IconProps) {
 			{...props}
 		>
 			<path
-				stroke-linecap="round"
+				strokeLinecap="round"
 				stroke-linejoin="round"
 				stroke-width="2"
 				d="M3.3 10h13.4m-5-5 5 5-5 5"

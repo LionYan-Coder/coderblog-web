@@ -192,7 +192,7 @@ export function Header() {
 											<div className="h-10 w-10 rounded-full bg-white/90 p-0.5 shadow-lg shadow-zinc-800/5 ring-1 ring-zinc-900/5 backdrop-blur dark:bg-zinc-800/90 dark:ring-white/10"></div>
 										</motion.div>
 										<motion.div
-											className="h-16 w-16 origin-left block relative"
+											className="h-16 w-16 origin-left block relative select-none"
 											style={{ transform: avatarTransform }}
 										>
 											<Image
@@ -212,7 +212,7 @@ export function Header() {
 
 				<div
 					ref={headerRef}
-					className="top-0 h-16 pt-6"
+					className="top-0 h-16 pt-6 z-50"
 					style={{
 						position:
 							'var(--header-position)' as React.CSSProperties['position']
@@ -244,7 +244,7 @@ export function Header() {
 												layoutId="avatar"
 												layout
 											>
-												<div className="h-10 w-10 rounded-full bg-white/90 p-0.5 shadow-lg shadow-zinc-800/5 ring-1 ring-zinc-900/5 backdrop-blur dark:bg-zinc-800/90 dark:ring-white/10">
+												<div className="h-10 w-10 rounded-full bg-white/90 p-0.5 shadow-lg shadow-zinc-800/5 ring-1 ring-zinc-900/5 backdrop-blur dark:bg-zinc-800/90 dark:ring-white/10  select-none">
 													<Image
 														className="rounded-full bg-zinc-100 object-cover dark:bg-zinc-800 w-full h-full"
 														src={GITHUB.DEFAULLT_AVATAR}

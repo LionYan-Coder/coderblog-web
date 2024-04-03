@@ -5,13 +5,5 @@ export default function BlogPage() {
 		console.log('click');
 	}
 
-	return (
-		<Container>
-			<MyBtn onClick={onClick}></MyBtn>
-		</Container>
-	);
-}
-
-function MyBtn({ onClick }: { onClick: () => void }) {
-	return <button onClick={() => onClick()}></button>;
+	return <Container>BlogArticleCard</Container>;
 }

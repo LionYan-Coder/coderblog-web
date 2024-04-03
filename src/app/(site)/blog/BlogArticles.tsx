@@ -1,10 +1,7 @@
+'use client';
 import BlogArticleCard from './BlogArticleCard';
 
-export default async function BlogArticles({
-	articles
-}: {
-	articles: Article[];
-}) {
+export default function BlogArticles({ articles }: { articles: Article[] }) {
 	return (
 		<div className="flex flex-col gap-16">
 			{articles.map((article) => (

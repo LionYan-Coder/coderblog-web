@@ -25,3 +25,4 @@ export { SubscriberIcon } from './icons/SubscriberIcon';
 export { TiltedSendIcon } from './icons/TiltedSendIcon';
 export { UTurnLeftIcon } from './icons/UTurnLeftIcon';
 export { TagIcon } from './icons/TagIcon';
+export { EmptyIcon } from './icons/EmptyIcon';

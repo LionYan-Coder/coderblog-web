@@ -1,4 +1,7 @@
+'use client';
+
 import dayjs from 'dayjs';
+import { motion, stagger } from 'framer-motion';
 import Link from 'next/link';
 import {
 	ArrowRightIcon,
@@ -9,7 +12,12 @@ import {
 
 export default function BlogArticleCard({ article }: { article: Article }) {
 	return (
-		<article className="group relative flex flex-col items-start">
+		<motion.article
+			initial={{ opacity: 0, y: 40 }}
+			whileInView={{ opacity: 1, y: 0 }}
+			viewport={{ once: true }}
+			className="group relative flex flex-col items-start"
+		>
 			<h2 className="text-base font-semibold tracking-tight text-zinc-800 dark:text-zinc-100">
 				<Link href={{ pathname: `/blog/${article.id}` }}>
 					<span className="absolute -inset-x-4 -inset-y-6 z-20 sm:-inset-x-6 sm:rounded-2xl"></span>
@@ -43,6 +51,6 @@ export default function BlogArticleCard({ article }: { article: Article }) {
 			</p>
 
 			<div className="absolute -inset-x-4 -inset-y-6 z-0 scale-95 bg-zinc-50 opacity-0 transition group-hover:scale-100 group-hover:opacity-100 sm:-inset-x-6 sm:rounded-2xl dark:bg-zinc-800/50"></div>
-		</article>
+		</motion.article>
 	);
 }
