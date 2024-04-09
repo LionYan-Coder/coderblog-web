@@ -1,7 +1,7 @@
 'use client';
 
 import dayjs from 'dayjs';
-import { motion, stagger } from 'framer-motion';
+import { motion } from 'framer-motion';
 import Link from 'next/link';
 import {
 	ArrowRightIcon,
@@ -9,8 +9,10 @@ import {
 	CursorClickIcon,
 	TagIcon
 } from '~/assets';
+import { prettifyNumber } from '~/lib/math';
+import Image from 'next/image';
 
-export default function BlogArticleCard({ article }: { article: Article }) {
+export function RecentBlogArticleCard({ article }: { article: Article }) {
 	return (
 		<motion.article
 			initial={{ opacity: 0, y: 40 }}
@@ -34,7 +36,7 @@ export default function BlogArticleCard({ article }: { article: Article }) {
 				</time>
 				<span className="flex items-center space-x-2">
 					<CursorClickIcon />
-					<span>2000</span>
+					<span>{prettifyNumber(2000)}</span>
 				</span>
 			</div>
 
@@ -50,7 +52,39 @@ export default function BlogArticleCard({ article }: { article: Article }) {
 				<ArrowRightIcon className="w-5 h-4 ml-2 opacity-0 -translate-x-2 group-hover:translate-x-0 group-hover:opacity-85 transition-all ease-in-out duration-150" />
 			</p>
 
-			<div className="absolute -inset-x-4 -inset-y-6 z-0 scale-95 bg-zinc-50 opacity-0 transition group-hover:scale-100 group-hover:opacity-100 sm:-inset-x-6 sm:rounded-2xl dark:bg-zinc-800/50"></div>
+			<motion.div className="absolute -inset-x-4 -inset-y-6 z-0 bg-zinc-100 sm:-inset-x-6 sm:rounded-2xl dark:bg-zinc-800/50 opacity-0 scale-95 transition group-hover:scale-100 group-hover:opacity-100"></motion.div>
 		</motion.article>
+	);
+}
+
+export function BlogArticleCard({ article }: { article: Article }) {
+	return (
+		<article className="group relative flex flex-col aspect-[240/160] rounded-2xl border cursor-pointer">
+			<Image
+				src={article.coverUrl}
+				alt={article.title}
+				width={768}
+				height={400}
+				className="w-full rounded-t-2xl"
+			/>
+			<div className="px-5 py-4">
+				<h2 className="text-base font-semibold tracking-tight text-zinc-800 dark:text-zinc-100">
+					{article.title}
+				</h2>
+				<p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+					{article.summary}
+				</p>
+				<div className="flex my-3 text-sm text-zinc-400 dark:text-zinc-500 space-x-3">
+					<time className="flex items-center space-x-2">
+						<CalendarIcon />
+						<span>{dayjs(article.createAt).format('DD/MM/YYYY')}</span>
+					</time>
+					<span className="flex items-center space-x-2">
+						<CursorClickIcon />
+						<span>{prettifyNumber(2000)}</span>
+					</span>
+				</div>
+			</div>
+		</article>
 	);
 }

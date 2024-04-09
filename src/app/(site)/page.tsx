@@ -3,7 +3,7 @@ import RecentPost from './RecentPost';
 import Resume from './Resume';
 import { Container } from '~/components/ui';
 
-export default function Home({ recent }: { recent: JSX.Element }) {
+export default function Home() {
 	return (
 		<Container>
 			<Resume />

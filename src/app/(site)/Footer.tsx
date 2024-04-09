@@ -22,7 +22,7 @@ export default function Footer() {
 						<div className="relative px-4 sm:px-8 lg:px-12">
 							<div className="mx-auto max-w-2xl lg:max-w-5xl">
 								<div className="flex flex-col items-center gap-6 md:flex-row md:justify-between">
-									<ul className="relative flex gap-x-6 gap-y-1 text-zinc-800 font-medium text-sm dark:text-zinc-200 hover:text-amber-800 dark:hover:text-amber-600  transition-colors">
+									<ul className="relative flex gap-x-6 gap-y-1 ">
 										{Navs.map((nav, index) => (
 											<motion.li
 												initial={{ opacity: 0, y: 20 }}
@@ -31,7 +31,12 @@ export default function Footer() {
 												viewport={{ once: true }}
 												transition={{ delay: index * 0.1 + 0.1 }}
 											>
-												<Link href={nav.link}>{nav.label}</Link>
+												<Link
+													href={nav.link}
+													className="text-zinc-800 font-medium text-sm dark:text-zinc-200 hover:text-amber-800 dark:hover:text-amber-600  transition-colors"
+												>
+													{nav.label}
+												</Link>
 											</motion.li>
 										))}
 									</ul>

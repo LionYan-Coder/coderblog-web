@@ -1,6 +1,6 @@
 import { EResponseCode } from '~/config/enum';
 import http from '~/http';
-import BlogArticles from './blog/BlogArticles';
+import { RecnetBlogArticles } from './blog/BlogArticles';
 import { PencilSwooshIcon } from '~/assets';
 
 async function fetchRecentArticle() {
@@ -22,7 +22,7 @@ export default async function RecentArticle() {
 				<PencilSwooshIcon className="mr-2 text-xl" />
 				近期文章
 			</p>
-			<BlogArticles articles={articles} />
+			<RecnetBlogArticles articles={articles} />
 		</div>
 	);
 }

@@ -14,6 +14,8 @@ interface RecentArticleRes {
 	list: Article[];
 	total: number;
 }
+
+
 interface Article {
 	id: number;
 	author: string;
