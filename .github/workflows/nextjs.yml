@@ -32,6 +32,8 @@ jobs:
     env:
       API_URL: ${{ vars.API_URL }}
       TOKEN: ${{ secrets.GIT_TOKEN }}
+      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}}
+      CLERK_SECRET_KEY: ${{secrets.CLERK_SECRET_KEY}}
     steps:
       - name: Checkout
         uses: actions/checkout@v4

@@ -34,6 +34,7 @@ import { GITHUB, domain } from '~/config/constants';
 import { usePathname } from 'next/navigation';
 import { cn } from '~/lib/utils';
 import { clamp } from '~/lib/math';
+import { SignInButton, SignedIn, SignedOut, UserButton, useUser } from '@clerk/nextjs';
 
 const fromScale = 1;
 const toScale = 36 / 64;
@@ -262,16 +263,83 @@ export function Header() {
 								<Navigation.Mobile className="pointer-events-auto relative z-50 md:hidden" />
 								<Navigation.Desktop className="pointer-events-auto relative z-50 hidden md:block" />
 							</div>
-							<div className="flex gap-3 justify-end md:flex-1">
-								<UserSignInButton />
+							<motion.div
+								initial={{ opacity: 0, y: -20, scale: 0.95 }}
+								animate={{ opacity: 1, y: 0, scale: 1 }}
+								className="flex gap-3 justify-end md:flex-1"
+							>
+								<UserInfo />
 								<ThemeSwither />
-							</div>
+							</motion.div>
 						</div>
 					</Container>
 				</div>
 			</motion.header>
 			{isHomePage && <div className="h-[--content-offset]" />}
 		</>
+	);
+}
+
+function UserInfo() {
+	const [tooltipOpen, setTooltipOpen] = useState(false);
+	const { user } = useUser()
+	return (
+		<AnimatePresence>
+			<SignedIn key="user-info">
+				<motion.div
+					className="pointer-events-auto relative flex h-10 items-center"
+					initial={{ opacity: 0, x: 25 }}
+					animate={{ opacity: 1, x: 0 }}
+					exit={{ opacity: 0, x: 25 }}
+				>
+					<UserButton
+						appearance={{
+							elements: { avatarBox: 'w-9 h-9 ring-2 ring-white/20' }
+						}}
+					/>
+				</motion.div>
+			</SignedIn>
+			<SignedOut key="sign-in">
+				<motion.div
+					className="pointer-events-auto"
+					initial={{ opacity: 0, x: 25 }}
+					animate={{ opacity: 1, x: 0 }}
+					exit={{ opacity: 0, x: 25 }}
+				>
+					<Tooltip.Provider delayDuration={400}>
+						<Tooltip.Root open={tooltipOpen} onOpenChange={setTooltipOpen}>
+							<SignInButton mode="modal">
+								<Tooltip.Trigger asChild>
+									<motion.button
+										initial={{ opacity: 0, y: -15 }}
+										animate={{ opacity: 1, y: 0 }}
+										className="group h-10 flex items-center rounded-full bg-gradient-to-b from-zinc-50/20 to-white/80 px-3 text-xl font-medium text-zinc-800 shadow-lg shadow-zinc-800/5 ring-1 ring-zinc-900/5 backdrop-blur-md focus:outline-none focus-visible:ring-2 dark:from-zinc-900/30 dark:to-zinc-800/80 dark:text-zinc-200 dark:ring-white/10 dark:hover:ring-white/20 dark:focus-visible:ring-yellow-500/80"
+										type="button"
+									>
+										<UserArrowLeftIcon />
+									</motion.button>
+								</Tooltip.Trigger>
+							</SignInButton>
+							<AnimatePresence>
+								{tooltipOpen && (
+									<Tooltip.Portal forceMount>
+										<Tooltip.Content asChild>
+											<motion.div
+												initial={{ opacity: 0, scale: 0.96 }}
+												animate={{ opacity: 1, scale: 1 }}
+												exit={{ opacity: 0, scale: 0.95 }}
+											>
+												用户登录
+											</motion.div>
+										</Tooltip.Content>
+									</Tooltip.Portal>
+								)}
+							</AnimatePresence>
+						</Tooltip.Root>
+					</Tooltip.Provider>
+				</motion.div>
+			</SignedOut>
+		</AnimatePresence>
 	);
 }
 
@@ -419,12 +487,8 @@ function ThemeSwither() {
 		<Tooltip.Provider delayDuration={400}>
 			<Tooltip.Root open={tooltipOpen} onOpenChange={setTooltipOpen}>
 				<Tooltip.Trigger asChild>
-					<motion.button
-						initial={{ opacity: 0, y: -15 }}
-						animate={{ opacity: 1, y: 0 }}
-						transition={{ delay: 0.2 }}
+					<button
 						className="group h-10 flex  items-center rounded-full bg-gradient-to-b from-zinc-50/20 to-white/80 px-3 text-xl font-medium text-zinc-800 shadow-lg shadow-zinc-800/5 ring-1 ring-zinc-900/5 backdrop-blur-md focus:outline-none focus-visible:ring-2 dark:from-zinc-900/30 dark:to-zinc-800/80 dark:text-zinc-200 dark:ring-white/10 dark:hover:ring-white/20 dark:focus-visible:ring-yellow-500/80"
-						aria-expanded={false}
 						type="button"
 						onClick={() => setTheme(theme !== 'dark' ? 'dark' : 'light')}
 					>
@@ -449,7 +513,7 @@ function ThemeSwither() {
 								</motion.div>
 							)}
 						</AnimatePresence>
-					</motion.button>
+					</button>
 				</Tooltip.Trigger>
 
 				<AnimatePresence>
