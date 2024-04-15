@@ -5,7 +5,7 @@ export function EmptyIcon(props: IconProps = {}) {
 		<svg
 			fill="none"
 			stroke="currentColor"
-			stroke-width="4"
+			strokeWidth="4"
 			viewBox="0 0 48 48"
 			aria-hidden="true"
 			focusable="false"

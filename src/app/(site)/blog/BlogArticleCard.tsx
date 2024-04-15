@@ -15,9 +15,16 @@ import Image from 'next/image';
 export function RecentBlogArticleCard({ article }: { article: Article }) {
 	return (
 		<motion.article
-			initial={{ opacity: 0, y: 40 }}
-			whileInView={{ opacity: 1, y: 0 }}
-			viewport={{ once: true }}
+			variants={{
+				initial: { opacity: 0, y: 40 },
+				animate: {
+					opacity: 1,
+					y: 0,
+					transition: {
+						type: 'spring'
+					}
+				}
+			}}
 			className="group relative flex flex-col items-start"
 		>
 			<h2 className="text-base font-semibold tracking-tight text-zinc-800 dark:text-zinc-100">
@@ -52,19 +59,31 @@ export function RecentBlogArticleCard({ article }: { article: Article }) {
 				<ArrowRightIcon className="w-5 h-4 ml-2 opacity-0 -translate-x-2 group-hover:translate-x-0 group-hover:opacity-85 transition-all ease-in-out duration-150" />
 			</p>
 
-			<motion.div className="absolute -inset-x-4 -inset-y-6 z-0 bg-zinc-100 sm:-inset-x-6 sm:rounded-2xl dark:bg-zinc-800/50 opacity-0 scale-95 transition group-hover:scale-100 group-hover:opacity-100"></motion.div>
+			<div className="absolute -inset-x-4 -inset-y-6 z-0 bg-zinc-100 sm:-inset-x-6 sm:rounded-2xl dark:bg-zinc-800/50 opacity-0 scale-95 transition group-hover:scale-100 group-hover:opacity-100"></div>
 		</motion.article>
 	);
 }
 
 export function BlogArticleCard({ article }: { article: Article }) {
 	return (
-		<article className="group relative flex flex-col aspect-[240/160] rounded-2xl border cursor-pointer">
+		<motion.article
+			variants={{
+				initial: { opacity: 0, y: 40 },
+				animate: {
+					opacity: 1,
+					y: 0
+					// transition: {
+					// 	type: 'spring'
+					// }
+				}
+			}}
+			className="group relative flex flex-col rounded-2xl border cursor-pointer"
+		>
 			<Image
 				src={article.coverUrl}
 				alt={article.title}
 				width={768}
-				height={400}
+				height={200}
 				className="w-full rounded-t-2xl"
 			/>
 			<div className="px-5 py-4">
@@ -85,6 +104,6 @@ export function BlogArticleCard({ article }: { article: Article }) {
 					</span>
 				</div>
 			</div>
-		</article>
+		</motion.article>
 	);
 }
