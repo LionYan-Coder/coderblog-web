@@ -2,7 +2,7 @@
 import { motion } from 'framer-motion';
 import { Container } from '~/components/ui';
 
-export default function Wall() {
+export default function Guestbook() {
 	return (
 		<Container className="mt-16 sm:mt-20">
 			<header className="max-w-2xl">

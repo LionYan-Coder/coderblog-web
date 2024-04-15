@@ -32,12 +32,11 @@ export default function Resume() {
 			className="relative w-full flex flex-col gap-4 pt-10 text-2xl h-[calc(100vh-var(--header-height))]"
 		>
 			<motion.p variants={variantItm}>
-				你好，我是
+				👋你好，我是
 				<span className="text-amber-800 text-3xl font-semibold dark:drop-shadow-[0_0_0.3rem_#92400E70]">
 					{' '}
-					Lion{' '}
+					Lion
 				</span>
-				👋。
 			</motion.p>
 			<motion.p className="group" variants={variantItm}>
 				<TypeAnimation

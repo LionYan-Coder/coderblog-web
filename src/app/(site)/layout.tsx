@@ -3,6 +3,7 @@ import { Header } from './Header';
 import Footer from './Footer';
 
 export default function SiteLayout({ children }: { children: ReactNode }) {
+	
 	return (
 		<>
 			{/* <div className="pointer-events-none fixed inset-0 select-none bg-[url('/grid-black.svg')] bg-top bg-repeat dark:bg-[url('/grid.svg')]" /> */}

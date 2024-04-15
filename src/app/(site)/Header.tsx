@@ -34,7 +34,13 @@ import { GITHUB, domain } from '~/config/constants';
 import { usePathname } from 'next/navigation';
 import { cn } from '~/lib/utils';
 import { clamp } from '~/lib/math';
-import { SignInButton, SignedIn, SignedOut, UserButton, useUser } from '@clerk/nextjs';
+import {
+	SignInButton,
+	SignedIn,
+	SignedOut,
+	UserButton,
+	useUser
+} from '@clerk/nextjs';
 
 const fromScale = 1;
 const toScale = 36 / 64;
@@ -202,6 +208,7 @@ export function Header() {
 												alt={GITHUB.DEFAULLT_NAME}
 												width={64}
 												height={64}
+												priority
 											></Image>
 										</motion.div>
 									</motion.div>
@@ -252,6 +259,7 @@ export function Header() {
 														alt={GITHUB.DEFAULLT_NAME}
 														width={40}
 														height={40}
+														priority
 													></Image>
 												</div>
 											</motion.div>
@@ -282,7 +290,7 @@ export function Header() {
 
 function UserInfo() {
 	const [tooltipOpen, setTooltipOpen] = useState(false);
-	const { user } = useUser()
+	const { user } = useUser();
 	return (
 		<AnimatePresence>
 			<SignedIn key="user-info">
