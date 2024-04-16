@@ -5,6 +5,7 @@ import { sansFont } from '~/lib/font';
 import { ThemeProvider } from '~/provider/theme';
 import { ClerkProvider } from '@clerk/nextjs';
 import { zhCN } from '~/lib/clerkLocalizations';
+import type { ReactNode } from 'react';
 
 export const metadata: Metadata = {
 	title: 'Lion Yan | Developer',
@@ -14,7 +15,7 @@ export const metadata: Metadata = {
 export default function RootLayout({
 	children
 }: Readonly<{
-	children: React.ReactNode;
+	children: ReactNode;
 }>) {
 	return (
 		<ClerkProvider localization={zhCN}>

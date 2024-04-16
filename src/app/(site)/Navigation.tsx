@@ -1,8 +1,8 @@
-'use clinet';
+'use client';
 import { motion, useMotionTemplate, useMotionValue } from 'framer-motion';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useCallback, useState } from 'react';
+import { type ReactNode, useCallback, useState } from 'react';
 import { Dialog } from '~/components/ui';
 import { Navs } from '~/config/nav';
 import { cn } from '~/lib/utils';
@@ -111,7 +111,7 @@ function NavItem({
 	children
 }: {
 	href: string;
-	children: React.ReactNode;
+	children: ReactNode;
 }) {
 	const isActive = usePathname() === href;
 	return (

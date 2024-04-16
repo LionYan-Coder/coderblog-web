@@ -26,3 +26,4 @@ export { TiltedSendIcon } from './icons/TiltedSendIcon';
 export { UTurnLeftIcon } from './icons/UTurnLeftIcon';
 export { TagIcon } from './icons/TagIcon';
 export { EmptyIcon } from './icons/EmptyIcon';
+export { MailIcon } from './icons/MailIcon';
