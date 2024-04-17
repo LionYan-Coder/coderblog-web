@@ -34,7 +34,7 @@ export const useAppContext = () => {
 	const context = useContext(AppStateContext);
 
 	if (context == null) {
-		throw new Error('components must be wrapped in AppContext');
+		throw new Error('_components must be wrapped in AppContext');
 	}
 
 	return context;

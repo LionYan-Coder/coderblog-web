@@ -1,11 +1,13 @@
-export type IconProps = React.SVGAttributes<SVGElement>;
+import { type SVGAttributes } from 'react';
+
+export type IconProps = SVGAttributes<SVGElement>;
 
 export { AppleIcon } from './icons/AppleIcon';
 export { ArrowLeftIcon } from './icons/ArrowLeftIcon';
 export { LogoIcon } from './icons/LogoIcon';
 export { ArrowRightIcon } from './icons/ArrowRightIcon';
 export { ArrowUpRightIcon } from './icons/ArrowUpRightIcon';
-export { MenuTriggerIcon } from './icons/menu-trigger';
+export { MenuTriggerIcon } from './icons/MenuTrigger';
 export { EyeCloseIcon } from './icons/EyeCloseIcon';
 export { EyeOpenIcon } from './icons/EyeOpenIcon';
 export { HomeIcon } from './icons/HomeIcon';
@@ -27,3 +29,11 @@ export { UTurnLeftIcon } from './icons/UTurnLeftIcon';
 export { TagIcon } from './icons/TagIcon';
 export { EmptyIcon } from './icons/EmptyIcon';
 export { MailIcon } from './icons/MailIcon';
+export { PannelLeftIcon } from './icons/PannelLeftIcon';
+export { RSSIcon } from './icons/RSSIcon';
+export { DashboardIcon } from './icons/DashboardIcon';
+export { NotebookIcon } from './icons/NotebookIcon';
+export { MailboxIcon } from './icons/MailboxIcon';
+export { UsersIcon } from './icons/UsersIcon';
+export { SettingIcon } from './icons/SettingIcon';
+export { SearchIcon } from './icons/SearchIcon';

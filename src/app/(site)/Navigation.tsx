@@ -95,7 +95,7 @@ function DesktopNav({ className }: { className?: string }) {
 				style={{ background }}
 				aria-hidden="true"
 			/>
-			<ul className="flex px-3 dark:text-zinc-200 text-zinc-800 text-sm font-medium ">
+			<ul className="flex px-3 dark:text-zinc-200 text-zinc-800 text-sm leading-6 font-medium ">
 				{Navs.map((nav) => (
 					<NavItem href={nav.link} key={nav.link}>
 						{nav.label}
@@ -106,13 +106,7 @@ function DesktopNav({ className }: { className?: string }) {
 	);
 }
 
-function NavItem({
-	href,
-	children
-}: {
-	href: string;
-	children: ReactNode;
-}) {
+function NavItem({ href, children }: { href: string; children: ReactNode }) {
 	const isActive = usePathname() === href;
 	return (
 		<li>

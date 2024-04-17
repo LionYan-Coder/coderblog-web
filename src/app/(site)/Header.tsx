@@ -14,8 +14,8 @@ import { GITHUB } from '~/config/constants';
 import { usePathname } from 'next/navigation';
 import { cn } from '~/lib/utils';
 import { clamp } from '~/lib/math';
-import { UserInfo } from '~/app/(site)/UserInfo';
-import { ThemeSwitcher } from '~/app/(site)/ThemeSwitcher';
+import { UserInfo } from '~/app/_components/UserInfo';
+import { ThemeSwitcher } from '~/app/_components/ThemeSwitcher';
 
 const fromScale = 1;
 const toScale = 36 / 64;
