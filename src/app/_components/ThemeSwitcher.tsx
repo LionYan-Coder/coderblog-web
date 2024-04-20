@@ -1,11 +1,23 @@
 'use client';
-import { HTMLAttributes, useState } from 'react';
+import { HTMLAttributes, useEffect, useMemo, useState } from 'react';
 import { useTheme } from 'next-themes';
 import { Tooltip } from '~/components/ui';
 import { AnimatePresence, motion } from 'framer-motion';
-import { MoonIcon, SunIcon } from '~/assets';
+import { MoonIcon, SunIcon, LightningIcon } from '~/assets';
 import { cn } from '~/lib/utils';
-
+const themes = [
+	{
+		label: '浅色模式',
+		value: 'light',
+		icon: <SunIcon className="text-amber-800" />
+	},
+	{
+		label: '深色模式',
+		value: 'dark',
+		icon: <MoonIcon />
+	},
+	{ label: '系统模式', value: 'system', icon: <LightningIcon /> }
+];
 export function ThemeSwitcher({
 	className,
 	side = 'top',
@@ -13,8 +25,20 @@ export function ThemeSwitcher({
 }: HTMLAttributes<HTMLButtonElement> & {
 	side?: 'top' | 'left' | 'bottom' | 'right';
 }) {
+	const [mounted, setMounted] = useState(false);
 	const [tooltipOpen, setTooltipOpen] = useState(false);
-	const { theme, setTheme } = useTheme();
+	const { theme, setTheme, resolvedTheme } = useTheme();
+	const Theme = useMemo(() => {
+		return themes.find((t) => t.value === theme);
+	}, [theme]);
+
+	useEffect(() => {
+		setMounted(true);
+	}, []);
+
+	if (!mounted) {
+		return null;
+	}
 
 	return (
 		<Tooltip.Provider delayDuration={300} disableHoverableContent>
@@ -26,29 +50,20 @@ export function ThemeSwitcher({
 							className
 						)}
 						type="button"
-						onClick={() => setTheme(theme !== 'dark' ? 'dark' : 'light')}
+						onClick={() =>
+							setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')
+						}
 						{...rest}
 					>
 						<AnimatePresence initial={false} mode="popLayout">
-							{theme === 'dark' ? (
-								<motion.div
-									key="moon"
-									initial={{ opacity: 0, translateY: 15 }}
-									animate={{ opacity: 1, translateY: 0 }}
-									exit={{ opacity: 0, translateY: -20 }}
-								>
-									<MoonIcon />
-								</motion.div>
-							) : (
-								<motion.div
-									key="sun"
-									initial={{ opacity: 0, translateY: 15 }}
-									animate={{ opacity: 1, translateY: 0 }}
-									exit={{ opacity: 0, translateY: -20 }}
-								>
-									<SunIcon className="text-amber-800" />
-								</motion.div>
-							)}
+							<motion.div
+								key={Theme?.value}
+								initial={{ opacity: 0, translateY: 15 }}
+								animate={{ opacity: 1, translateY: 0 }}
+								exit={{ opacity: 0, translateY: -20 }}
+							>
+								{Theme?.icon}
+							</motion.div>
 						</AnimatePresence>
 					</button>
 				</Tooltip.Trigger>
@@ -62,7 +77,7 @@ export function ThemeSwitcher({
 									animate={{ opacity: 1, scale: 1 }}
 									exit={{ opacity: 0, scale: 0.95 }}
 								>
-									{theme === 'light' ? '浅色主题' : '深色主题'}
+									{Theme?.label}
 								</motion.div>
 							</Tooltip.Content>
 						</Tooltip.Portal>
