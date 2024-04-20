@@ -6,8 +6,7 @@ import {
 	getPaginationRowModel
 } from '@tanstack/table-core';
 import { flexRender, useReactTable } from '@tanstack/react-table';
-import { Table } from '~/components/ui';
-import { DataTablePagination } from '~/components/DataTablePagination';
+import { Empty, Table, DataTablePagination } from '~/components';
 
 interface DataTableProps<TData, TValue> {
 	columns: ColumnDef<TData, TValue>[];
@@ -59,8 +58,8 @@ export function DataTable<TData, TValue>({
 						))
 					) : (
 						<Table.Row>
-							<Table.Cell colSpan={columns.length} className="h-24 text-center">
-								No results.
+							<Table.Cell colSpan={columns.length} className="h-32 text-center">
+								<Empty />
 							</Table.Cell>
 						</Table.Row>
 					)}

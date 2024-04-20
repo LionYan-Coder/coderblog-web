@@ -3,7 +3,7 @@ import {
 	ChevronRightIcon,
 	DoubleArrowLeftIcon,
 	DoubleArrowRightIcon
-} from '@radix-ui/react-icons';
+} from '~/assets';
 import { Table } from '@tanstack/react-table';
 import { Button, Select } from '~/components/ui';
 

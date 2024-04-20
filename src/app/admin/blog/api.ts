@@ -2,12 +2,16 @@ import http from '~/http';
 import { EResponseCode } from '~/config/enum';
 
 export async function fetchArticleList(params?: ArticleListReq) {
-	const { code, data } = await http<ArticleListRes>('/admin/article', 'GET', {
-		params
-	});
+	const { code, data, message } = await http<ArticleListRes>(
+		'/admin/article',
+		'GET',
+		{
+			params
+		}
+	);
 
 	if (code !== EResponseCode.success) {
-		return null;
+		throw new Error(JSON.stringify({ code, message }));
 	}
 	return data;
 }

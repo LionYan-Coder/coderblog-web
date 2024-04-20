@@ -17,3 +17,4 @@ export * from './progress';
 export * from './dropdown-menu';
 export * from './tabs';
 export * from './table';
+export * from './form';

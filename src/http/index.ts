@@ -1,7 +1,9 @@
 import { ContentType } from '~/config/constants';
 import { EContentType, EResponseType } from '~/config/enum';
+import { cookies } from 'next/headers';
+import { auth } from '@clerk/nextjs';
 
-type THtppMethod = 'GET' | 'PUT' | 'POST' | 'DELETE' | 'PATCH';
+type THttpMethod = 'GET' | 'PUT' | 'POST' | 'DELETE' | 'PATCH';
 
 interface IHttpOptions {
 	data?: Record<string, any> | FormData | BodyInit;
@@ -20,7 +22,7 @@ interface Response<T> {
 
 export async function http<T = any>(
 	url: string,
-	method: THtppMethod = 'GET',
+	method: THttpMethod = 'GET',
 	{ responseType = EResponseType.json, ...rest }: IHttpOptions = {}
 ): Promise<Response<T>> {
 	const baseUrl = process.env.API_URL + url;
@@ -29,9 +31,12 @@ export async function http<T = any>(
 		paramsUrl ? baseUrl + '?' + paramsUrl : baseUrl,
 		rest.requestInit
 	);
-
+	const { sessionClaims, getToken } = auth();
 	const headers: HeadersInit = {
 		[ContentType]: EContentType.JSON,
+		SID: sessionClaims?.sid || '',
+		SUB: sessionClaims?.sub || '',
+		Authorization: `Bearer ${await getToken()}`,
 		...rest.headers
 	};
 
