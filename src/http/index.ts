@@ -1,6 +1,5 @@
-import { ContentType } from '~/config/constants';
+import { Authorization, ContentType } from '~/config/constants';
 import { EContentType, EResponseType } from '~/config/enum';
-import { cookies } from 'next/headers';
 import { auth } from '@clerk/nextjs';
 
 type THttpMethod = 'GET' | 'PUT' | 'POST' | 'DELETE' | 'PATCH';
@@ -14,17 +13,11 @@ interface IHttpOptions {
 	requestInit?: RequestInit;
 }
 
-interface Response<T> {
-	code: number;
-	message: string;
-	data: T;
-}
-
 export async function http<T = any>(
 	url: string,
 	method: THttpMethod = 'GET',
 	{ responseType = EResponseType.json, ...rest }: IHttpOptions = {}
-): Promise<Response<T>> {
+): Promise<BaseResponse<T>> {
 	const baseUrl = process.env.API_URL + url;
 	const paramsUrl = formatUrlParams(rest.params);
 	const request = new Request(
@@ -32,11 +25,12 @@ export async function http<T = any>(
 		rest.requestInit
 	);
 	const { sessionClaims, getToken } = auth();
+	console.log('token', await getToken());
 	const headers: HeadersInit = {
 		[ContentType]: EContentType.JSON,
 		SID: sessionClaims?.sid || '',
 		SUB: sessionClaims?.sub || '',
-		Authorization: `Bearer ${await getToken()}`,
+		[Authorization]: `Bearer ${await getToken()}`,
 		...rest.headers
 	};
 

@@ -15,3 +15,15 @@ export async function fetchArticleList(params?: ArticleListReq) {
 	}
 	return data;
 }
+
+export async function fetchArticleDetail(id: number) {
+	const { code, data, message } = await http<Article>(
+		`/admin/article/${id}`,
+		'GET'
+	);
+
+	if (code !== EResponseCode.success) {
+		throw new Error(JSON.stringify({ code, message }));
+	}
+	return data;
+}

@@ -15,7 +15,6 @@ interface RecentArticleRes {
 	total: number;
 }
 
-
 interface Article {
 	id: number;
 	author: string;
@@ -26,4 +25,5 @@ interface Article {
 	tags: string[];
 	createAt: string;
 	updateAt: string;
+	published: boolean;
 }

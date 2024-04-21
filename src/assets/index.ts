@@ -47,3 +47,5 @@ export { CornerUpIcon } from './icons/CornerUpIcon';
 export { ArrowUpToLineIcon } from './icons/ArrowUpToLineIcon';
 export { LoaderCircleIcon } from './icons/LoaderCircleIcon';
 export { CheckIcon } from './icons/CheckIcon';
+export { ImagePlaceholderIcon } from './icons/ImagePlaceholderIcon';
+export { TrashIcon } from './icons/TrashIcon';
