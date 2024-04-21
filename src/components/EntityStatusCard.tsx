@@ -4,7 +4,7 @@ export function EntityStatusCard({ published }: { published?: boolean }) {
 	return (
 		<div
 			className={cn(
-				'border py-4 px-6 text-center rounded text-sm font-medium flex items-center transition-colors',
+				'border py-4 px-6 text-center rounded-md text-sm font-medium flex items-center transition-colors',
 				published
 					? 'border-green-300 bg-green-100 text-green-800 dark:bg-green-800/30 dark:text-green-500 dark:border-green-600'
 					: 'border-sky-300 bg-sky-100 text-sky-800 dark:bg-sky-800/30 dark:text-sky-500 dark:border-sky-600'
