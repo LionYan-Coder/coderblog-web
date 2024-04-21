@@ -1,13 +1,13 @@
 'use client';
 import {
 	BackButton,
-	Badge,
 	Button,
 	Card,
 	EntityInfoCard,
 	EntityStatusBadge,
 	Form,
 	Input,
+	MilkdownEditorWrapper,
 	UploadImage
 } from '~/components';
 import { ArrowUpToLineIcon, CheckIcon, TrashIcon } from '~/assets';
@@ -184,7 +184,9 @@ export function EditBlog({ article }: EditBlogProps) {
 								通过Milkdown富文本编辑器编写MDX内容
 							</Card.Description>
 						</Card.Header>
-						<Card.Content></Card.Content>
+						<Card.Content>
+							<MilkdownEditorWrapper />
+						</Card.Content>
 					</Card>
 				</div>
 			</div>
