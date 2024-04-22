@@ -27,3 +27,17 @@ interface Article {
 	updateAt: string;
 	published: boolean;
 }
+
+interface CreateArticleReq {
+	title: string;
+	coverUrl: string;
+	summary?: string;
+	content?: string;
+	tags?: string[];
+}
+
+interface UpdateArticleReq extends CreateArticleReq {}
+
+interface CreateArticleRes {
+	id: number;
+}

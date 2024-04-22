@@ -10,8 +10,12 @@ import {
 	MilkdownEditorWrapper,
 	UploadImage
 } from '~/components';
-import { ArrowUpToLineIcon, CheckIcon, TrashIcon } from '~/assets';
-import { useParams } from 'next/navigation';
+import {
+	ArrowUpToLineIcon,
+	CheckIcon,
+	LoaderCircleIcon,
+	TrashIcon
+} from '~/assets';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -19,6 +23,8 @@ import { Textarea } from '~/components/ui/textarea';
 import { StickyHeader } from '~/app/admin/_components/stickyHeader';
 import { useState } from 'react';
 import { EntityStatusCard } from '~/components/EntityStatusCard';
+import { useHttp } from '~/http';
+import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
 	title: z
@@ -26,13 +32,12 @@ const formSchema = z.object({
 			required_error: '请填写标题'
 		})
 		.trim()
+		.min(5, '标题不能小于5个字符')
 		.max(30, '标题不能超过30个字符'),
 
 	summary: z.string().trim().max(120, '概要不能超过120个字符'),
-	tags: z.string().max(30, '不能超过5个标记'),
-	coverUrl: z
-		.string({ required_error: '缺少封面' })
-		.url({ message: '地址不合法' })
+	tags: z.string().max(30, '标记不能超过30个字符'),
+	coverUrl: z.string().min(1, '缺少封面').url({ message: '地址不合法' })
 });
 
 interface EditBlogProps {
@@ -40,21 +45,35 @@ interface EditBlogProps {
 }
 
 export function EditBlog({ article }: EditBlogProps) {
-	const params = useParams();
-	const [loading, setLoading] = useState(false);
+	const router = useRouter();
+	const { fetchCreateArticle } = useHttp();
+	const [currentArticle, setCurrentArtilce] = useState<Article | undefined>(
+		article
+	);
+	const [saveLoading, setSaveLoading] = useState(false);
 	const [publishLoading, setPublishLoading] = useState(false);
+	const [content, setContent] = useState<Article['content']>(
+		currentArticle?.content || ''
+	);
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			title: article?.title || '',
-			summary: article?.summary || '',
-			tags: article?.tags.join(',') || '',
-			coverUrl: article?.coverUrl || ''
+			title: currentArticle?.title || '',
+			summary: currentArticle?.summary || '',
+			tags: currentArticle?.tags.join(',') || '',
+			coverUrl: currentArticle?.coverUrl || ''
 		}
 	});
 
-	function handleSave() {
-		console.log('form', form.getValues());
+	console.log('currentArticle', currentArticle);
+
+	async function handleSubmit(formData: z.infer<typeof formSchema>) {
+		setSaveLoading(true);
+		const params = { ...formData, content, tags: formData.tags.split(',') };
+		const { id } = await fetchCreateArticle(params).finally(() =>
+			setSaveLoading(false)
+		);
+		router.replace('/admin/blog/' + id);
 	}
 
 	return (
@@ -62,19 +81,27 @@ export function EditBlog({ article }: EditBlogProps) {
 			<StickyHeader className="flex items-center gap-4 mb-4">
 				<BackButton />
 				<h1 className="text-xl font-semibold tracking-tight whitespace-nowrap">
-					{params.id !== '0' ? '编辑博客' : '新建博客'}
+					{currentArticle?.id ? currentArticle.title : '新建博客'}
 				</h1>
 				<EntityStatusBadge
-					published={article?.published}
+					published={currentArticle?.published}
 					className="ml-auto sm:ml-0"
 				/>
 				<div className="hidden md:flex md:ml-auto items-center gap-2">
-					<Button size="sm" variant="success" disabled>
-						<ArrowUpToLineIcon className=" mr-2" />
+					<Button size="sm" variant="success" disabled={!currentArticle?.id}>
+						{publishLoading ? (
+							<LoaderCircleIcon className="text-base animate-spin mr-2" />
+						) : (
+							<ArrowUpToLineIcon className="mr-2" />
+						)}
 						发布
 					</Button>
-					<Button onClick={() => handleSave()} size="sm">
-						<CheckIcon className="text-base mr-2" />
+					<Button onClick={() => form.handleSubmit(handleSubmit)()} size="sm">
+						{saveLoading ? (
+							<LoaderCircleIcon className="text-base animate-spin mr-2" />
+						) : (
+							<CheckIcon className="text-base mr-2" />
+						)}
 						保存
 					</Button>
 				</div>
@@ -150,9 +177,7 @@ export function EditBlog({ article }: EditBlogProps) {
 													<Form.Control>
 														<UploadImage
 															value={value}
-															onUploadComplete={(data) => {
-																onChange(data.url);
-															}}
+															onUploadComplete={(data) => onChange(data.url)}
 														/>
 													</Form.Control>
 													<Form.Message />
@@ -167,9 +192,9 @@ export function EditBlog({ article }: EditBlogProps) {
 				</div>
 
 				<div className="grid auto-rows-max gap-4 order-first md:order-2">
-					<EntityStatusCard published={article?.published} />
-					<EntityInfoCard entity={article} />
-					{article && (
+					<EntityStatusCard published={currentArticle?.published} />
+					<EntityInfoCard entity={currentArticle} />
+					{currentArticle?.id && (
 						<Button variant="destructive" size="sm">
 							<TrashIcon className="mr-2 text-base" />
 							删除此数据
@@ -192,18 +217,18 @@ export function EditBlog({ article }: EditBlogProps) {
 			</div>
 
 			<div className="flex items-center gap-4 sm:hidden">
-				{!article && (
+				{currentArticle?.id && (
 					<Button variant="destructive" size="sm">
 						<TrashIcon className="mr-2 text-base" />
 						删除此数据
 					</Button>
 				)}
 				<div className="flex ml-auto items-center gap-2">
-					<Button size="sm" variant="success" disabled>
-						<ArrowUpToLineIcon className=" mr-2" />
+					<Button size="sm" variant="success" disabled={!currentArticle?.id}>
+						<ArrowUpToLineIcon className="mr-2" />
 						发布
 					</Button>
-					<Button onClick={() => handleSave()} size="sm">
+					<Button onClick={() => form.handleSubmit(handleSubmit)()} size="sm">
 						<CheckIcon className="text-base mr-2" />
 						保存
 					</Button>

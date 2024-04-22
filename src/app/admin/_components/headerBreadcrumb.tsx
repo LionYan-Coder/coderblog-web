@@ -20,6 +20,7 @@ export function HeaderBreadcrumb() {
 		setHistoryPaths(historyPaths);
 		setPageTitle(document.title);
 	}, [pathname]);
+
 	return (
 		<Breadcrumb className="hidden sm:flex">
 			<Breadcrumb.List>
@@ -42,7 +43,7 @@ export function HeaderBreadcrumb() {
 					)}
 
 				<Breadcrumb.Page>
-					<Breadcrumb.Link href={pathname}>{pageTitle}</Breadcrumb.Link>
+					<Breadcrumb.Link href="#">{pageTitle}</Breadcrumb.Link>
 				</Breadcrumb.Page>
 			</Breadcrumb.List>
 		</Breadcrumb>

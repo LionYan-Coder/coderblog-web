@@ -6,8 +6,12 @@ interface IProps {
 }
 
 export async function generateMetadata({ params }: IProps) {
+	const article =
+		Number(params.id) !== 0
+			? await fetchArticleDetail(Number(params.id))
+			: undefined;
 	return {
-		title: params.id !== '0' ? '编辑博客' : '新建博客'
+		title: article?.title || '新建博客'
 	};
 }
 

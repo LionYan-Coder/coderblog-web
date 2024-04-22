@@ -1,12 +1,11 @@
 'use client';
-import { Input, Progress } from '~/components/ui';
+import { Input, Progress, useToast } from '~/components/ui';
 import { ChangeEvent, ReactNode, useState } from 'react';
 import { getBase64 } from '~/lib/file';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Authorization } from '~/config/constants';
 import { useAuth } from '@clerk/nextjs';
 import { EResponseCode } from '~/config/enum';
-import { useToast } from '~/components/ui/use-toast';
 import { cn } from '~/lib/utils';
 import { ImagePlaceholderIcon } from '~/assets';
 import Image from 'next/image';
@@ -61,7 +60,7 @@ export function UploadImage({
 						toast({
 							title: `文件上传失败 ${code}`,
 							description: message,
-							variant: 'destructive'
+							variant: 'warning'
 						});
 					}
 				} else {
@@ -73,8 +72,14 @@ export function UploadImage({
 				}
 			};
 
-			xhr.onerror = (err) => {
-				console.log('err', err);
+			xhr.onerror = () => {
+				console.log('xhr', xhr);
+
+				toast({
+					title: `请求失败`,
+					description: xhr.statusText,
+					variant: 'destructive'
+				});
 				setLoading(false);
 			};
 			xhr.onloadstart = () => {
@@ -97,7 +102,7 @@ export function UploadImage({
 					progress={uploadProgress}
 					className="flex items-center justify-center"
 				>
-					<AnimatePresence mode="popLayout">
+					<AnimatePresence mode="popLayout" initial={false}>
 						<motion.img
 							key={imageName}
 							initial={{ opacity: 0, scale: 0.95 }}
@@ -161,14 +166,13 @@ export function UploadLoading({
 								<Image
 									width={16}
 									height={16}
-									className="w-4 h-4 animate-bounce"
+									className="w-4 h-4 mb-2 animate-bounce"
 									src="/upload-arrow.png"
 									alt="upload-arrow"
+									priority
 								/>
-								<div className="flex items-center">
-									<Progress className="shrink" value={progress} />
-									<p className="text-xs text-white">{progress + '%'}</p>
-								</div>
+								<Progress className="shrink w-20" value={progress} />
+								<p className="text-xs text-white">{progress + '%'}</p>
 								{text}
 							</div>
 						</motion.div>

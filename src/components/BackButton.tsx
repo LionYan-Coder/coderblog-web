@@ -1,9 +1,10 @@
 'use client';
-import { Button } from '~/components/ui';
+import { Button, useToast } from '~/components/ui';
 import { CornerUpIcon } from '~/assets';
 import { useRouter } from 'next/navigation';
 
 export function BackButton() {
+	const { toast } = useToast();
 	const router = useRouter();
 	return (
 		<Button

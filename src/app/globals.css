@@ -42,8 +42,12 @@ html.dark {
     --accent-foreground: 240 5.9% 10%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --success: 142.1 76.2% 36.3%;
-    --success-foreground: 355.7 100% 97.3%;
+    --success: #3E9B4F;
+    --success-foreground: 0 0% 98%;
+    --info: #3E9B4F;
+    --info-foreground: 0 0% 98%;
+    --warning: #EF5F00;
+    --warning-foreground: 0 0% 98%;
     --border: 240 5.9% 90%;
     --input: 240 5.9% 90%;
     --ring: 240 5.9% 10%;
@@ -67,8 +71,12 @@ html.dark {
     --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-    --success: 142.1 76.2% 36.3%;
+    --success: #2A7E3B;
     --success-foreground: 0 0% 98%;
+    --info: #3E9B4F;
+    --info-foreground: 0 0% 98%;
+    --warning: #CC4E00;
+    --warning-foreground: 0 0% 98%;
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
     --ring: 240 4.9% 83.9%;

@@ -21,6 +21,7 @@ import {
 	useContext,
 	useId
 } from 'react';
+import { motion } from 'framer-motion';
 
 type FormFieldContextValue<
 	TFieldValues extends FieldValues = FieldValues,
@@ -99,7 +100,10 @@ const FormLabel = forwardRef<
 	return (
 		<Label
 			ref={ref}
-			className={cn(error && 'text-destructive', className)}
+			className={cn(
+				error && 'text-destructive transition-colors ease-in-out',
+				className
+			)}
 			htmlFor={formItemId}
 			{...props}
 		/>
@@ -159,14 +163,17 @@ const FormMessage = forwardRef<
 	}
 
 	return (
-		<p
+		<motion.p
 			ref={ref}
 			id={formMessageId}
+			key={formMessageId}
+			initial={{ opacity: 0, y: -10 }}
+			animate={{ opacity: 1, y: 0 }}
 			className={cn('text-[0.8rem] font-medium text-destructive', className)}
-			{...props}
+			{...(props as any)}
 		>
 			{body}
-		</p>
+		</motion.p>
 	);
 });
 FormMessage.displayName = 'FormMessage';

@@ -1,10 +1,11 @@
 import { Authorization, ContentType } from '~/config/constants';
 import { EContentType, EResponseType } from '~/config/enum';
 import { auth } from '@clerk/nextjs';
+import useHttp from './useHttp';
 
-type THttpMethod = 'GET' | 'PUT' | 'POST' | 'DELETE' | 'PATCH';
+export type THttpMethod = 'GET' | 'PUT' | 'POST' | 'DELETE' | 'PATCH';
 
-interface IHttpOptions {
+export interface IHttpOptions {
 	data?: Record<string, any> | FormData | BodyInit;
 	params?: Record<string, any>;
 	responseType?: EResponseType;
@@ -24,12 +25,11 @@ export async function http<T = any>(
 		paramsUrl ? baseUrl + '?' + paramsUrl : baseUrl,
 		rest.requestInit
 	);
-	const { sessionClaims, getToken } = auth();
-	console.log('token', await getToken());
+
+	const { getToken, userId } = auth();
 	const headers: HeadersInit = {
 		[ContentType]: EContentType.JSON,
-		SID: sessionClaims?.sid || '',
-		SUB: sessionClaims?.sub || '',
+		UserId: userId || '',
 		[Authorization]: `Bearer ${await getToken()}`,
 		...rest.headers
 	};
@@ -68,5 +68,5 @@ export function formatUrlParams(params: IHttpOptions['params']) {
 		return '';
 	}
 }
-
+export { useHttp };
 export default http;

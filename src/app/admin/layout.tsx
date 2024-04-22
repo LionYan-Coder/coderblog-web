@@ -2,6 +2,7 @@ import * as React from 'react';
 import { type ReactNode } from 'react';
 import { Sidebar } from '~/app/admin/_components/sidebar';
 import { Header } from '~/app/admin/_components/header';
+import { ClientOnly, Toaster } from '~/components';
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
 	return (
@@ -11,6 +12,9 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
 				<Header />
 				<main className="p-4">{children}</main>
 			</div>
+			<ClientOnly>
+				<Toaster />
+			</ClientOnly>
 		</div>
 	);
 }
