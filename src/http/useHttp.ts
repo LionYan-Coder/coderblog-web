@@ -74,14 +74,14 @@ export function useHttp() {
 		if (code !== EResponseCode.success) {
 			toast({
 				title: code + '',
-				description: code,
+				description: message,
 				variant: 'warning'
 			});
 			return Promise.reject({ code, data, message });
 		}
 		toast({
 			title: '保存成功',
-			description: code || '保存成功',
+			description: '保存成功',
 			variant: 'success'
 		});
 
@@ -95,14 +95,14 @@ export function useHttp() {
 		if (code !== EResponseCode.success) {
 			toast({
 				title: code + '',
-				description: code,
+				description: message,
 				variant: 'warning'
 			});
 			return Promise.reject({ code, data, message });
 		}
 		toast({
 			title: '保存成功',
-			description: code || '保存成功',
+			description: '保存成功',
 			variant: 'success'
 		});
 
@@ -117,14 +117,14 @@ export function useHttp() {
 		if (code !== EResponseCode.success) {
 			toast({
 				title: code + '',
-				description: code,
+				description: message,
 				variant: 'warning'
 			});
 			return Promise.reject({ code, data, message });
 		}
 		toast({
 			title: '删除成功',
-			description: code || '删除成功',
+			description: '删除成功',
 			variant: 'success'
 		});
 
@@ -140,10 +140,35 @@ export function useHttp() {
 		if (code !== EResponseCode.success) {
 			toast({
 				title: code + '',
-				description: code,
+				description: message,
 				variant: 'warning'
 			});
 			return Promise.reject({ code, data, message });
+		}
+
+		return data;
+	}
+	async function fetchPublishArticle(id: number, publish: boolean) {
+		const { code, data, message } = await http<Article>(
+			`/admin/article/${publish ? 'publish' : 'unpublish'}/${id}`,
+			'POST'
+		);
+
+		if (code !== EResponseCode.success) {
+			toast({
+				title: code + '',
+				description: message,
+				variant: 'warning'
+			});
+			return Promise.reject({ code, data, message });
+		}
+
+		if (publish) {
+			toast({
+				title: '发布成功',
+				description: '发布成功',
+				variant: 'success'
+			});
 		}
 
 		return data;
@@ -154,7 +179,8 @@ export function useHttp() {
 		fetchCreateArticle,
 		fetchArticleDetail,
 		fetchUpdateArticle,
-		fetchDeleteArticle
+		fetchDeleteArticle,
+		fetchPublishArticle
 	};
 }
 

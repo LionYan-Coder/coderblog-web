@@ -48,9 +48,13 @@ interface EditBlogProps {
 
 export function EditBlog({ article }: EditBlogProps) {
 	const router = useRouter();
-	const { fetchCreateArticle, fetchUpdateArticle, fetchDeleteArticle } =
-		useHttp();
-	const [currentArticle, setCurrentArtilce] = useState<Article | undefined>(
+	const {
+		fetchCreateArticle,
+		fetchUpdateArticle,
+		fetchDeleteArticle,
+		fetchPublishArticle
+	} = useHttp();
+	const [currentArticle, setCurrentArticle] = useState<Article | undefined>(
 		article
 	);
 	const [saveLoading, setSaveLoading] = useState(false);
@@ -71,16 +75,30 @@ export function EditBlog({ article }: EditBlogProps) {
 	async function handleSubmit(formData: z.infer<typeof formSchema>) {
 		setSaveLoading(true);
 		const params = { ...formData, content, tags: formData.tags.split(',') };
-		const { id } = await fetchCreateArticle(params).finally(() =>
-			setSaveLoading(false)
-		);
-		router.replace('/admin/blog/' + id);
+		const { id } = await (currentArticle?.id
+			? fetchUpdateArticle(currentArticle?.id, params)
+			: fetchCreateArticle(params)
+		).finally(() => setSaveLoading(false));
+		id && router.replace('/admin/blog/' + id);
 	}
 
 	async function handleDelete() {
 		await fetchDeleteArticle(currentArticle?.id || 0);
 		router.back();
 		return true;
+	}
+
+	async function handlePublish() {
+		setPublishLoading(true);
+		await fetchPublishArticle(
+			currentArticle?.id || 0,
+			!currentArticle?.published
+		).finally(() => setPublishLoading(false));
+
+		setCurrentArticle((origin) => ({
+			...(origin as Article),
+			published: !origin?.published
+		}));
 	}
 
 	return (
@@ -95,13 +113,17 @@ export function EditBlog({ article }: EditBlogProps) {
 					className="ml-auto sm:ml-0"
 				/>
 				<div className="hidden md:flex md:ml-auto items-center gap-2">
-					<Button variant="success" disabled={!currentArticle?.id}>
+					<Button
+						variant="success"
+						disabled={!currentArticle?.id}
+						onClick={handlePublish}
+					>
 						{publishLoading ? (
 							<LoaderCircleIcon className="text-base animate-spin mr-2" />
 						) : (
 							<ArrowUpToLineIcon className="mr-2" />
 						)}
-						发布
+						{currentArticle?.published ? '撤销发布' : '发布'}
 					</Button>
 					<Button onClick={() => form.handleSubmit(handleSubmit)()}>
 						{saveLoading ? (
@@ -226,13 +248,17 @@ export function EditBlog({ article }: EditBlogProps) {
 			<div className="flex items-center gap-4 sm:hidden">
 				{currentArticle?.id && <EntityDeleteButton onConfirm={handleDelete} />}
 				<div className="flex ml-auto items-center gap-2">
-					<Button variant="success" disabled={!currentArticle?.id}>
+					<Button
+						variant="success"
+						disabled={!currentArticle?.id}
+						onClick={handlePublish}
+					>
 						{publishLoading ? (
 							<LoaderCircleIcon className="text-base animate-spin mr-2" />
 						) : (
 							<ArrowUpToLineIcon className="mr-2" />
 						)}
-						发布
+						{currentArticle?.published ? '撤销发布' : '发布'}
 					</Button>
 					<Button onClick={() => form.handleSubmit(handleSubmit)()}>
 						{saveLoading ? (
