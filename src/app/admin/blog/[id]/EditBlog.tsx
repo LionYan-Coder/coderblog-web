@@ -8,7 +8,8 @@ import {
 	Form,
 	Input,
 	MilkdownEditorWrapper,
-	UploadImage
+	UploadImage,
+	EntityDeleteButton
 } from '~/components';
 import {
 	ArrowUpToLineIcon,
@@ -25,6 +26,7 @@ import { useState } from 'react';
 import { EntityStatusCard } from '~/components/EntityStatusCard';
 import { useHttp } from '~/http';
 import { useRouter } from 'next/navigation';
+import { isAsyncFunc } from '~/lib/is';
 
 const formSchema = z.object({
 	title: z
@@ -46,7 +48,8 @@ interface EditBlogProps {
 
 export function EditBlog({ article }: EditBlogProps) {
 	const router = useRouter();
-	const { fetchCreateArticle } = useHttp();
+	const { fetchCreateArticle, fetchUpdateArticle, fetchDeleteArticle } =
+		useHttp();
 	const [currentArticle, setCurrentArtilce] = useState<Article | undefined>(
 		article
 	);
@@ -65,8 +68,6 @@ export function EditBlog({ article }: EditBlogProps) {
 		}
 	});
 
-	console.log('currentArticle', currentArticle);
-
 	async function handleSubmit(formData: z.infer<typeof formSchema>) {
 		setSaveLoading(true);
 		const params = { ...formData, content, tags: formData.tags.split(',') };
@@ -74,6 +75,12 @@ export function EditBlog({ article }: EditBlogProps) {
 			setSaveLoading(false)
 		);
 		router.replace('/admin/blog/' + id);
+	}
+
+	async function handleDelete() {
+		await fetchDeleteArticle(currentArticle?.id || 0);
+		router.back();
+		return true;
 	}
 
 	return (
@@ -88,7 +95,7 @@ export function EditBlog({ article }: EditBlogProps) {
 					className="ml-auto sm:ml-0"
 				/>
 				<div className="hidden md:flex md:ml-auto items-center gap-2">
-					<Button size="sm" variant="success" disabled={!currentArticle?.id}>
+					<Button variant="success" disabled={!currentArticle?.id}>
 						{publishLoading ? (
 							<LoaderCircleIcon className="text-base animate-spin mr-2" />
 						) : (
@@ -96,7 +103,7 @@ export function EditBlog({ article }: EditBlogProps) {
 						)}
 						发布
 					</Button>
-					<Button onClick={() => form.handleSubmit(handleSubmit)()} size="sm">
+					<Button onClick={() => form.handleSubmit(handleSubmit)()}>
 						{saveLoading ? (
 							<LoaderCircleIcon className="text-base animate-spin mr-2" />
 						) : (
@@ -195,10 +202,10 @@ export function EditBlog({ article }: EditBlogProps) {
 					<EntityStatusCard published={currentArticle?.published} />
 					<EntityInfoCard entity={currentArticle} />
 					{currentArticle?.id && (
-						<Button variant="destructive" size="sm">
-							<TrashIcon className="mr-2 text-base" />
-							删除此数据
-						</Button>
+						<EntityDeleteButton
+							onConfirm={handleDelete}
+							buttonProps={{ className: 'hidden sm:inline-flex' }}
+						/>
 					)}
 				</div>
 				<div className="md:col-span-4 order-last">
@@ -217,19 +224,22 @@ export function EditBlog({ article }: EditBlogProps) {
 			</div>
 
 			<div className="flex items-center gap-4 sm:hidden">
-				{currentArticle?.id && (
-					<Button variant="destructive" size="sm">
-						<TrashIcon className="mr-2 text-base" />
-						删除此数据
-					</Button>
-				)}
+				{currentArticle?.id && <EntityDeleteButton onConfirm={handleDelete} />}
 				<div className="flex ml-auto items-center gap-2">
-					<Button size="sm" variant="success" disabled={!currentArticle?.id}>
-						<ArrowUpToLineIcon className="mr-2" />
+					<Button variant="success" disabled={!currentArticle?.id}>
+						{publishLoading ? (
+							<LoaderCircleIcon className="text-base animate-spin mr-2" />
+						) : (
+							<ArrowUpToLineIcon className="mr-2" />
+						)}
 						发布
 					</Button>
-					<Button onClick={() => form.handleSubmit(handleSubmit)()} size="sm">
-						<CheckIcon className="text-base mr-2" />
+					<Button onClick={() => form.handleSubmit(handleSubmit)()}>
+						{saveLoading ? (
+							<LoaderCircleIcon className="text-base animate-spin mr-2" />
+						) : (
+							<CheckIcon className="text-base mr-2" />
+						)}
 						保存
 					</Button>
 				</div>

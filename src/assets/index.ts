@@ -49,3 +49,4 @@ export { LoaderCircleIcon } from './icons/LoaderCircleIcon';
 export { CheckIcon } from './icons/CheckIcon';
 export { ImagePlaceholderIcon } from './icons/ImagePlaceholderIcon';
 export { TrashIcon } from './icons/TrashIcon';
+export { CircleAlertIcon } from './icons/CircleAlertIcon';

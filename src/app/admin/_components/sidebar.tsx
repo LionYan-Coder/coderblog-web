@@ -60,7 +60,7 @@ export function Sidebar() {
 									href={menu.link}
 									className={cn(
 										'w-9 h-9 md:w-8 md:h-8 text-xl transition-colors text-muted-foreground hover:text-foreground bg-transparent rounded-lg flex items-center justify-center',
-										pathname === menu.link && 'bg-accent text-foreground'
+										pathname.includes(menu.link) && 'bg-accent text-foreground'
 									)}
 								>
 									{menu.icon}
@@ -82,7 +82,8 @@ export function Sidebar() {
 								href={SettingMenu.link}
 								className={cn(
 									'w-9 h-9 md:w-8 md:h-8 text-xl transition-colors text-muted-foreground hover:text-foreground bg-transparent rounded-lg flex items-center justify-center',
-									pathname === SettingMenu.link && 'bg-accent text-foreground'
+									pathname.includes(SettingMenu.link) &&
+										'bg-accent text-foreground'
 								)}
 							>
 								{SettingMenu.icon}

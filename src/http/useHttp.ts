@@ -110,7 +110,7 @@ export function useHttp() {
 	}
 
 	async function fetchDeleteArticle(id: number) {
-		const { code, data, message } = await http<CreateArticleRes>(
+		const { code, data, message } = await http(
 			'/admin/article/' + id,
 			'DELETE'
 		);
