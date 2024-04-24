@@ -5,7 +5,10 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { GITHUB } from '~/config/constants';
 import * as React from 'react';
-import { CommonMenus, SettingMenu } from '~/app/admin/_components/sidebar';
+import {
+	SettingMenus,
+	CommonMenus
+} from '~/app/admin/_components/ResizableLayout';
 
 export function SheetNavbar() {
 	return (
@@ -28,7 +31,7 @@ export function SheetNavbar() {
 							priority
 						></Image>
 					</Link>
-					{[...CommonMenus, SettingMenu].map((menu) => (
+					{[...CommonMenus, ...SettingMenus].map((menu) => (
 						<div key={menu.link} className="flex justify-between">
 							<Link
 								href={menu.link}

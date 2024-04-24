@@ -11,3 +11,4 @@ export { EntityStatusBadge } from './EntityStatusBadge';
 export { MilkdownEditor, MilkdownEditorWrapper } from './MilkdownEditor';
 export { EntityDeleteButton } from './EntityOperatorButton';
 export { DataTableOperatorDropdownMenu } from './DataTableOperatorMenu';
+export { DataTableOperatorHeader } from './DataTableOperatorHeader';

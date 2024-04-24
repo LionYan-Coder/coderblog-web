@@ -5,7 +5,9 @@ import { Setting2Icon } from '~/assets';
 import {
 	Button,
 	DataTableOperatorDropdownMenu,
-	EntityStatusCard
+	DataTableOperatorHeader,
+	EntityStatusCard,
+	Popover
 } from '~/components';
 import { useHttp } from '~/http';
 import { useRouter } from 'next/navigation';
@@ -67,13 +69,13 @@ export const useColumns = ({ refresh }: { refresh?: () => Promise<void> }) => {
 			cell: (props) => {
 				const { createAt, updateAt } = props.row.original;
 				return (
-					<div className="text-muted-foreground">
-						<p className="flex space-x-1">
-							<span className="flex-1">create by </span>
+					<div className="text-muted-foreground max-w-48">
+						<p className="flex justify-between space-x-1">
+							<span>create</span>
 							<span>{createAt}</span>
 						</p>
-						<p className="flex space-x-1">
-							<span className="flex-1">update by</span>
+						<p className="flex justify-between space-x-1">
+							<span>update</span>
 							<span>{updateAt}</span>
 						</p>
 					</div>
@@ -82,11 +84,7 @@ export const useColumns = ({ refresh }: { refresh?: () => Promise<void> }) => {
 		},
 		{
 			accessorKey: 'operator',
-			header: () => (
-				<Button size="icon" variant="ghost">
-					<Setting2Icon className="text-lg" />
-				</Button>
-			),
+			header: ({ table }) => <DataTableOperatorHeader />,
 			cell: (props) => (
 				<DataTableOperatorDropdownMenu
 					row={props.row.original}

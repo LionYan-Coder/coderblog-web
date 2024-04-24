@@ -23,3 +23,5 @@ export * from './toaster';
 export * from './use-toast';
 export * from './alert-dialog';
 export * from './skeleton';
+export * from './resizable';
+export * from './separator';
