@@ -25,7 +25,7 @@ export function BlogArticles({ articles }: { articles: Article[] }) {
 	);
 }
 
-export function RecnetBlogArticles({ articles }: { articles: Article[] }) {
+export function RecentBlogArticles({ articles }: { articles: Article[] }) {
 	return (
 		<motion.div
 			variants={{

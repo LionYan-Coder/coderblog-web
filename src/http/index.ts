@@ -5,28 +5,29 @@ import useHttp from './useHttp';
 
 export type THttpMethod = 'GET' | 'PUT' | 'POST' | 'DELETE' | 'PATCH';
 
-export interface IHttpOptions {
-	data?: Record<string, any> | FormData | BodyInit;
-	params?: Record<string, any>;
+export interface IHttpOptions<P = Record<string, any>> {
+	data?: P | FormData | BodyInit;
+	params?: P;
 	responseType?: EResponseType;
 	headers?: HeadersInit;
 	fetchInit?: RequestInit;
 	requestInit?: RequestInit;
 }
 
-export async function http<T = any>(
+export async function http<T = any, P = Record<string, any>>(
 	url: string,
 	method: THttpMethod = 'GET',
-	{ responseType = EResponseType.json, ...rest }: IHttpOptions = {}
+	{ responseType = EResponseType.json, ...rest }: IHttpOptions<P> = {}
 ): Promise<BaseResponse<T>> {
 	const baseUrl = process.env.API_URL + url;
-	const paramsUrl = formatUrlParams(rest.params);
+	const paramsUrl = rest.params ? formatUrlParams(rest.params) : '';
 	const request = new Request(
 		paramsUrl ? baseUrl + '?' + paramsUrl : baseUrl,
 		rest.requestInit
 	);
 
 	const { getToken, userId } = auth();
+	console.log('userId', userId);
 	const headers: HeadersInit = {
 		[ContentType]: EContentType.JSON,
 		UserId: userId || '',

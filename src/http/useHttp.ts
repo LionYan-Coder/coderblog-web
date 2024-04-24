@@ -3,18 +3,17 @@ import { EContentType, EResponseCode, EResponseType } from '~/config/enum';
 import { useAuth } from '@clerk/nextjs';
 import { IHttpOptions, THttpMethod, formatUrlParams } from '.';
 import { useToast } from '~/components';
-import http from '~/http/index';
 
 export function useHttp() {
 	const { getToken, userId } = useAuth();
 	const { toast } = useToast();
-	async function http<T = any>(
+	async function http<T = any, P = Record<string, any>>(
 		url: string,
 		method: THttpMethod = 'GET',
-		{ responseType = EResponseType.json, ...rest }: IHttpOptions = {}
+		{ responseType = EResponseType.json, ...rest }: IHttpOptions<P> = {}
 	): Promise<BaseResponse<T>> {
 		const baseUrl = process.env.NEXT_PUBLIC_API_URL + url;
-		const paramsUrl = formatUrlParams(rest.params);
+		const paramsUrl = rest.params ? formatUrlParams(rest.params) : rest.params;
 		const request = new Request(
 			paramsUrl ? baseUrl + '?' + paramsUrl : baseUrl,
 			rest.requestInit

@@ -15,6 +15,11 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
+        protocol: 'https',
+        hostname: 'secure-krill-horribly.ngrok-free.app',
+        pathname: '/upload/img/*',
+      },
+      {
         protocol: 'http',
         hostname: 'localhost',
         port: '8000',

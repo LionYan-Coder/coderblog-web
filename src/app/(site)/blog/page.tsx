@@ -2,9 +2,10 @@ import { Container } from '~/components/ui';
 import { EResponseCode } from '~/config/enum';
 import http from '~/http';
 import { BlogArticles } from './BlogArticles';
+import { EmptyIcon } from '~/assets';
 
 async function fetchBlogList() {
-	const { code, data } = await http<ArticleListRes>('/article');
+	const { code, data } = await http<ArticleListRes, ArticleListReq>('/article');
 	if (code !== EResponseCode.success) {
 		return [];
 	}
@@ -12,7 +13,7 @@ async function fetchBlogList() {
 }
 
 export default async function BlogPage() {
-	const res = await fetchBlogList();
+	const list = await fetchBlogList();
 	return (
 		<Container className="mt-16 sm:mt-20">
 			<header className="max-w-2xl">
@@ -25,7 +26,14 @@ export default async function BlogPage() {
 					</span>
 				</p>
 			</header>
-			<BlogArticles articles={res} />
+			{list && list.length > 0 ? (
+				<BlogArticles articles={list || []} />
+			) : (
+				<div className="max-w-2xl flex flex-col justify-center text-muted-foreground space-y-3">
+					<EmptyIcon className="w-9 h-9" />
+					<p>暂无文章...</p>
+				</div>
+			)}
 		</Container>
 	);
 }

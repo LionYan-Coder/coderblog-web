@@ -1,5 +1,5 @@
 interface ArticleListRes {
-	list: Article[];
+	list?: Article[];
 	total: number;
 	page: number;
 	size: number;
