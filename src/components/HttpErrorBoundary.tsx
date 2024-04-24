@@ -14,6 +14,7 @@ export function HttpErrorBoundary({
 	error: Error & { digest?: string };
 	reset: () => void;
 }) {
+	console.log('error', error);
 	const parseError = JSON.parse(error.message) as IHttpError;
 
 	return (

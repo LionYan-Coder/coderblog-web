@@ -3,6 +3,7 @@ import { EContentType, EResponseCode, EResponseType } from '~/config/enum';
 import { useAuth } from '@clerk/nextjs';
 import { IHttpOptions, THttpMethod, formatUrlParams } from '.';
 import { useToast } from '~/components';
+import http from '~/http/index';
 
 export function useHttp() {
 	const { getToken, userId } = useAuth();
@@ -174,10 +175,30 @@ export function useHttp() {
 		return data;
 	}
 
+	async function fetchArticleList(params?: ArticleListReq) {
+		const { code, data, message } = await http<ArticleListRes>(
+			'/admin/article',
+			'GET',
+			{
+				params
+			}
+		);
+
+		if (code !== EResponseCode.success) {
+			toast({
+				title: code + '',
+				description: message,
+				variant: 'warning'
+			});
+		}
+		return data;
+	}
+
 	return {
 		http,
 		fetchCreateArticle,
 		fetchArticleDetail,
+		fetchArticleList,
 		fetchUpdateArticle,
 		fetchDeleteArticle,
 		fetchPublishArticle

@@ -50,3 +50,5 @@ export { CheckIcon } from './icons/CheckIcon';
 export { ImagePlaceholderIcon } from './icons/ImagePlaceholderIcon';
 export { TrashIcon } from './icons/TrashIcon';
 export { CircleAlertIcon } from './icons/CircleAlertIcon';
+export { Setting2Icon } from './icons/Setting2Icon';
+export { EllipsisIcon } from './icons/EllipsisIcon';

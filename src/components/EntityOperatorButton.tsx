@@ -1,12 +1,12 @@
 'use client';
 import { CircleAlertIcon, LoaderCircleIcon, TrashIcon } from '~/assets';
-import { Button, Popover, type ButtonProps } from './ui';
-import { PopoverContentProps } from '@radix-ui/react-popover';
+import { Button, AlertDialog, type ButtonProps } from './ui';
+import { AlertDialogContentProps } from '@radix-ui/react-alert-dialog';
 import { cn } from '~/lib/utils';
 import { useState } from 'react';
 import { isAsyncFunc } from '~/lib/is';
 
-interface EntityDeleteButtonProps extends PopoverContentProps {
+interface EntityDeleteButtonProps extends AlertDialogContentProps {
 	buttonProps: ButtonProps;
 	onCancel: () => void;
 	onConfirm: () => Promise<boolean>;
@@ -29,8 +29,6 @@ export function EntityDeleteButton({
 
 	function handleConfirm() {
 		if (onConfirm && isAsyncFunc(onConfirm)) {
-			console.log('asymc');
-
 			setLoading(true);
 			onConfirm?.()
 				.then((b) => {
@@ -46,18 +44,14 @@ export function EntityDeleteButton({
 	}
 
 	return (
-		<Popover open={open} onOpenChange={setOpen}>
-			<Popover.Trigger asChild>
-				<Button
-					variant="destructive"
-					{...buttonProps}
-					onClick={() => setOpen(true)}
-				>
+		<AlertDialog open={open} onOpenChange={setOpen}>
+			<AlertDialog.Trigger asChild>
+				<Button variant="destructive" {...buttonProps}>
 					<TrashIcon className="mr-2 text-base" />
 					删除此数据
 				</Button>
-			</Popover.Trigger>
-			<Popover.Content className={cn(className)} {...rest}>
+			</AlertDialog.Trigger>
+			<AlertDialog.Content className={cn(className)} {...rest}>
 				<div className="grid gap-4">
 					<div className="space-y-2">
 						<h4 className="font-medium leading-none flex items-center">
@@ -78,7 +72,7 @@ export function EntityDeleteButton({
 						</Button>
 					</div>
 				</div>
-			</Popover.Content>
-		</Popover>
+			</AlertDialog.Content>
+		</AlertDialog>
 	);
 }

@@ -10,3 +10,4 @@ export { EntityStatusCard } from './EntityStatusCard';
 export { EntityStatusBadge } from './EntityStatusBadge';
 export { MilkdownEditor, MilkdownEditorWrapper } from './MilkdownEditor';
 export { EntityDeleteButton } from './EntityOperatorButton';
+export { DataTableOperatorDropdownMenu } from './DataTableOperatorMenu';
