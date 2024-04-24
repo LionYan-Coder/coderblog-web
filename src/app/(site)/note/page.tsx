@@ -28,7 +28,7 @@ export default async function NotePage() {
 
 			<div className="mt-16 sm:mt-20">
 				<div className="md:border-l md:border-zinc-100 md:pl-6 md:dark:border-zinc-700/40">
-					<NoteList notes={res} />
+					<NoteList notes={res || []} />
 				</div>
 			</div>
 		</Container>

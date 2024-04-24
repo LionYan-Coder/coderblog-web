@@ -8,12 +8,13 @@ import {
 import { flexRender, useReactTable } from '@tanstack/react-table';
 import { Empty, Table, DataTablePagination, Skeleton } from '~/components';
 import { useColumns } from '~/app/admin/blog/columns';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useHttp } from '~/http';
 import { cn } from '~/lib/utils';
 
 export function DataTable() {
 	const { fetchArticleList } = useHttp();
+
 	const [loading, setLoading] = useState<boolean>(true);
 	const [tableData, setTableData] = useState<Article[]>([]);
 	const { columns } = useColumns({ refresh: getData });
@@ -29,7 +30,7 @@ export function DataTable() {
 		const { list, total, page } = await fetchArticleList().finally(() =>
 			setLoading(false)
 		);
-		setTableData(list);
+		setTableData(list || []);
 	}
 
 	useEffect(() => {
