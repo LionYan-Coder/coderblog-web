@@ -9,7 +9,7 @@ import type { ReactNode } from 'react';
 
 export const metadata: Metadata = {
 	title: 'Lion Yan | Developer',
-	description: '我叫Lion，一名开发者，热爱技术同时也是一名猫奴。'
+	description: '我叫Lion，一名前端开发者'
 };
 
 export default function RootLayout({
