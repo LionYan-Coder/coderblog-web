@@ -1,7 +1,7 @@
 import { EResponseCode } from '~/config/enum';
 import http from '~/http';
 import { RecentBlogArticles } from './blog/BlogArticles';
-import { EmptyIcon, PencilSwooshIcon } from '~/assets';
+import { PencilSwooshIcon } from '~/assets';
 
 async function fetchArticles() {
 	const { data, code } = await http<ArticleListRes, ArticleListReq>(
