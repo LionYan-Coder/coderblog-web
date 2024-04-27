@@ -22,11 +22,12 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Textarea } from '~/components/ui/textarea';
 import { StickyHeader } from '~/app/admin/_components/stickyHeader';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { EntityStatusCard } from '~/components/EntityStatusCard';
 import { useHttp } from '~/http';
 import { useRouter } from 'next/navigation';
 import { isAsyncFunc } from '~/lib/is';
+import { EditorContext, useEditor } from '~/hooks/useEditor';
 
 const formSchema = z.object({
 	title: z
@@ -59,9 +60,7 @@ export function EditBlog({ article }: EditBlogProps) {
 	);
 	const [saveLoading, setSaveLoading] = useState(false);
 	const [publishLoading, setPublishLoading] = useState(false);
-	const [content, setContent] = useState<Article['content']>(
-		currentArticle?.content || ''
-	);
+	const context = useEditor();
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -74,10 +73,15 @@ export function EditBlog({ article }: EditBlogProps) {
 
 	async function handleSubmit(formData: z.infer<typeof formSchema>) {
 		setSaveLoading(true);
-		const params = { ...formData, content, tags: formData.tags.split(',') };
-		const { id } = await (currentArticle?.id
-			? fetchUpdateArticle(currentArticle?.id, params)
-			: fetchCreateArticle(params)
+		const params = {
+			...formData,
+			content: context.value,
+			tags: formData.tags.split(',')
+		};
+		const { id } = await (
+			currentArticle?.id
+				? fetchUpdateArticle(currentArticle?.id, params)
+				: fetchCreateArticle(params)
 		).finally(() => setSaveLoading(false));
 		id && router.replace('/admin/blog/' + id);
 	}
@@ -100,6 +104,12 @@ export function EditBlog({ article }: EditBlogProps) {
 			published: !origin?.published
 		}));
 	}
+
+	useEffect(() => {
+		if (currentArticle?.content) {
+			context.setDefaultValue(currentArticle?.content);
+		}
+	}, [context, currentArticle?.content]);
 
 	return (
 		<div className="md:max-w-6xl mx-auto">
@@ -239,7 +249,9 @@ export function EditBlog({ article }: EditBlogProps) {
 							</Card.Description>
 						</Card.Header>
 						<Card.Content>
-							<MilkdownEditorWrapper />
+							<EditorContext.Provider value={context}>
+								<MilkdownEditorWrapper />
+							</EditorContext.Provider>
 						</Card.Content>
 					</Card>
 				</div>

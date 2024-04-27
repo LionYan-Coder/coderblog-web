@@ -83,7 +83,7 @@ export function ResizableLayout({
 					)}`;
 				}}
 				className={cn(
-					'hidden sm:block',
+					'hidden sm:block relative h-screen overflow-y-hidden',
 					isCollapsed && 'min-w-[50px] transition-all duration-300 ease-in-out'
 				)}
 			>
@@ -110,14 +110,14 @@ export function ResizableLayout({
 				<Separator />
 				<Nav isCollapsed={isCollapsed} menus={SettingMenus} />
 			</Resizable.Panel>
-			<ResizableHandle className="hidden sm:flex" withHandle />
+			<ResizableHandle className="hidden sm:flex h-screen" withHandle />
 
 			<Resizable.Panel
 				defaultSize={defaultLayout[1]}
 				minSize={30}
-				className="transition-all duration-300 ease-in-out"
+				className="transition-all duration-300 ease-in-out h-screen !overflow-auto"
 			>
-				<div className="w-full h-full flex flex-col">
+				<div className="w-full flex flex-col">
 					<Header />
 					<main className="p-4">{children}</main>
 				</div>
