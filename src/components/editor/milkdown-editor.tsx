@@ -3,10 +3,8 @@
 import {
 	defaultValueCtx,
 	Editor,
-	editorViewCtx,
 	editorViewOptionsCtx,
-	rootCtx,
-	serializerCtx
+	rootCtx
 } from '@milkdown/core';
 import { nord } from '@milkdown/theme-nord';
 import { Milkdown, MilkdownProvider, useEditor } from '@milkdown/react';
@@ -17,15 +15,20 @@ import { history } from '@milkdown/plugin-history';
 import { prism } from '@milkdown/plugin-prism';
 import { indent } from '@milkdown/plugin-indent';
 import { useTheme } from 'next-themes';
-import { useMemo } from 'react';
 import { useEditorContext } from '~/hooks/useEditor';
 
 import '~/assets/themes/tailwind.scss';
 import '~/assets/themes/tailwind-dark.scss';
+import { CommandSlashCard, slash } from '~/components/editor/plugins/slash';
+import {
+	ProsemirrorAdapterProvider,
+	usePluginViewFactory
+} from '@prosemirror-adapter/react';
 
 export function MilkdownEditor() {
 	const { resolvedTheme } = useTheme();
 	const { defaultValue, setValue } = useEditorContext();
+	const pluginViewFactory = usePluginViewFactory();
 	const editor = useEditor(
 		(root) =>
 			Editor.make()
@@ -36,31 +39,27 @@ export function MilkdownEditor() {
 					}));
 					ctx.set(rootCtx, root);
 					ctx.set(defaultValueCtx, defaultValue);
+					ctx.set(slash.key, {
+						view: pluginViewFactory({
+							component: CommandSlashCard
+						})
+					});
 					ctx
 						.get(listenerCtx)
 						.markdownUpdated((_ctx, markdown, prevMarkdown) => {
-							console.log('markdown', markdown);
 							setValue(markdown);
 						});
 				})
 				.config(nord)
 				.use(commonmark)
-				.use(commonmark)
 				.use(clipboard)
 				.use(listener)
 				.use(prism)
 				.use(indent)
-				.use(history),
+				.use(history)
+				.use(slash),
 		[resolvedTheme]
 	);
-
-	const getContent = useMemo(() => {
-		return editor.get()?.action((ctx) => {
-			const editorView = ctx.get(editorViewCtx);
-			const serializer = ctx.get(serializerCtx);
-			return serializer(editorView.state.doc);
-		});
-	}, [editor]);
 
 	return <Milkdown />;
 }
@@ -68,7 +67,9 @@ export function MilkdownEditor() {
 export function MilkdownEditorWrapper() {
 	return (
 		<MilkdownProvider>
-			<MilkdownEditor />
+			<ProsemirrorAdapterProvider>
+				<MilkdownEditor />
+			</ProsemirrorAdapterProvider>
 		</MilkdownProvider>
 	);
 }

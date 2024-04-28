@@ -57,7 +57,7 @@
   --md-grid-active: var(--md-grid-active-inverted);
   --md-grid-border-color: var(--md-grid-border-color-inverted);
 
-  @apply min-h-96 bg-[url('/grid.svg')] bg-top bg-repeat px-4 py-6 border overflow-auto;
+  @apply min-h-96 bg-[url('/grid.svg')] bg-top bg-repeat px-3 py-4 border overflow-auto;
   max-height: 600px;
 
   & {

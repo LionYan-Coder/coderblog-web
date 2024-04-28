@@ -165,7 +165,7 @@
   --code-blocks-font-size: 0.9em;
   --inline-code-font-size: 0.9em;
 
-  @apply min-h-96 bg-[url('/grid-black.svg')] bg-top bg-repeat px-4 py-6 border overflow-auto;
+  @apply min-h-96 bg-[url('/grid-black.svg')] bg-top bg-repeat px-3 py-4 border overflow-auto;
   max-height: 600px;
 
   & {
