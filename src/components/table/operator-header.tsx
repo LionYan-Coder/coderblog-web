@@ -1,7 +1,7 @@
 import { Button, Popover } from '~/components/ui';
 import { Setting2Icon } from '~/assets';
 
-export function DataTableOperatorHeader() {
+export function OperatorHeader() {
 	return (
 		<Popover>
 			<Popover.Trigger asChild>

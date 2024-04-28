@@ -1,6 +1,6 @@
 'use client';
 import { CircleAlertIcon, LoaderCircleIcon, TrashIcon } from '~/assets';
-import { Button, AlertDialog, type ButtonProps } from './ui';
+import { Button, AlertDialog, type ButtonProps } from '../ui';
 import { AlertDialogContentProps } from '@radix-ui/react-alert-dialog';
 import { cn } from '~/lib/utils';
 import { useState } from 'react';

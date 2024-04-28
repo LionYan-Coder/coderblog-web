@@ -1,4 +1,5 @@
 'use client';
+
 import {
 	defaultValueCtx,
 	Editor,
@@ -15,11 +16,12 @@ import { clipboard } from '@milkdown/plugin-clipboard';
 import { history } from '@milkdown/plugin-history';
 import { prism } from '@milkdown/plugin-prism';
 import { indent } from '@milkdown/plugin-indent';
-import '~/assets/themes/tailwind.scss';
-import '~/assets/themes/tailwind-dark.scss';
 import { useTheme } from 'next-themes';
 import { useMemo } from 'react';
 import { useEditorContext } from '~/hooks/useEditor';
+
+import '~/assets/themes/tailwind.scss';
+import '~/assets/themes/tailwind-dark.scss';
 
 export function MilkdownEditor() {
 	const { resolvedTheme } = useTheme();

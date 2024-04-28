@@ -3,8 +3,8 @@ import {
 	BackButton,
 	Button,
 	Card,
-	EntityInfoCard,
-	EntityStatusBadge,
+	InfoCard,
+	BadgeStatus,
 	Form,
 	Input,
 	MilkdownEditorWrapper,
@@ -23,7 +23,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Textarea } from '~/components/ui/textarea';
 import { StickyHeader } from '~/app/admin/_components/stickyHeader';
 import { useEffect, useState } from 'react';
-import { EntityStatusCard } from '~/components/EntityStatusCard';
+import { CardStatus } from '~/components/entity/card-status';
 import { useHttp } from '~/http';
 import { useRouter } from 'next/navigation';
 import { isAsyncFunc } from '~/lib/is';
@@ -118,7 +118,7 @@ export function EditBlog({ article }: EditBlogProps) {
 				<h1 className="text-xl font-semibold tracking-tight whitespace-nowrap">
 					{currentArticle?.id ? currentArticle.title : '新建博客'}
 				</h1>
-				<EntityStatusBadge
+				<BadgeStatus
 					published={currentArticle?.published}
 					className="ml-auto sm:ml-0"
 				/>
@@ -231,8 +231,8 @@ export function EditBlog({ article }: EditBlogProps) {
 				</div>
 
 				<div className="grid auto-rows-max gap-4 order-first md:order-2">
-					<EntityStatusCard published={currentArticle?.published} />
-					<EntityInfoCard entity={currentArticle} />
+					<CardStatus published={currentArticle?.published} />
+					<InfoCard entity={currentArticle} />
 					{currentArticle?.id && (
 						<EntityDeleteButton
 							onConfirm={handleDelete}

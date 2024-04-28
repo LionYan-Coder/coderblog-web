@@ -5,8 +5,8 @@ import { Setting2Icon } from '~/assets';
 import {
 	Button,
 	DataTableOperatorDropdownMenu,
-	DataTableOperatorHeader,
-	EntityStatusCard,
+	OperatorHeader,
+	CardStatus,
 	Popover
 } from '~/components';
 import { useHttp } from '~/http';
@@ -53,7 +53,7 @@ export const useColumns = ({ refresh }: { refresh?: () => Promise<void> }) => {
 			accessorKey: 'published',
 			header: '状态',
 			cell: (props) => (
-				<EntityStatusCard
+				<CardStatus
 					published={props.getValue()}
 					publishedText="已发布"
 					unPublishedText="草稿箱"
@@ -84,7 +84,7 @@ export const useColumns = ({ refresh }: { refresh?: () => Promise<void> }) => {
 		},
 		{
 			accessorKey: 'operator',
-			header: ({ table }) => <DataTableOperatorHeader />,
+			header: ({ table }) => <OperatorHeader />,
 			cell: (props) => (
 				<DataTableOperatorDropdownMenu
 					row={props.row.original}

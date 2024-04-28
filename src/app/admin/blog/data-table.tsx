@@ -6,7 +6,7 @@ import {
 	getPaginationRowModel
 } from '@tanstack/table-core';
 import { flexRender, useReactTable } from '@tanstack/react-table';
-import { Empty, Table, DataTablePagination, Skeleton } from '~/components';
+import { Empty, Table, TablePagination, Skeleton } from '~/components';
 import { useColumns } from '~/app/admin/blog/columns';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useHttp } from '~/http';
@@ -114,7 +114,7 @@ export function DataTable() {
 					</Table.Body>
 				)}
 			</Table>
-			<DataTablePagination table={table} />
+			<TablePagination table={table} />
 		</div>
 	);
 }

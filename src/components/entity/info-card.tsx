@@ -10,7 +10,7 @@ interface EntityInfoCardProps {
 	entity?: EntityInfo;
 }
 
-export function EntityInfoCard({ entity }: EntityInfoCardProps) {
+export function InfoCard({ entity }: EntityInfoCardProps) {
 	return (
 		<Card>
 			<Card.Header>

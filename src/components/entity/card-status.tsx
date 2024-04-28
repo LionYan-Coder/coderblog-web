@@ -8,7 +8,7 @@ interface EntityStatusCardProps {
 	className?: string;
 }
 
-export function EntityStatusCard({
+export function CardStatus({
 	published,
 	className,
 	publishedText = '编辑发布版本',

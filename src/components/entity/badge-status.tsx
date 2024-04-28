@@ -1,5 +1,5 @@
 import { Badge } from '~/components/ui';
-export function EntityStatusBadge({
+export function BadgeStatus({
 	published,
 	className
 }: {
