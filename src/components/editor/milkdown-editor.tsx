@@ -3,7 +3,9 @@
 import {
 	defaultValueCtx,
 	Editor,
+	editorViewCtx,
 	editorViewOptionsCtx,
+	parserCtx,
 	rootCtx
 } from '@milkdown/core';
 import { nord } from '@milkdown/theme-nord';
@@ -24,6 +26,9 @@ import {
 	ProsemirrorAdapterProvider,
 	usePluginViewFactory
 } from '@prosemirror-adapter/react';
+import { useEffect } from 'react';
+import { Slice } from 'prosemirror-model';
+import { Spin } from '~/components';
 
 export function MilkdownEditor() {
 	const { resolvedTheme } = useTheme();
@@ -37,18 +42,14 @@ export function MilkdownEditor() {
 						...prev,
 						attributes: { class: `milkdown-theme-${resolvedTheme}` }
 					}));
-					ctx.set(rootCtx, root);
-					ctx.set(defaultValueCtx, defaultValue);
-					ctx.set(slash.key, {
-						view: pluginViewFactory({
-							component: CommandSlashCard
-						})
-					});
 					ctx
 						.get(listenerCtx)
 						.markdownUpdated((_ctx, markdown, prevMarkdown) => {
 							setValue(markdown);
 						});
+					ctx.set(rootCtx, root);
+					console.log('set defaultValue', defaultValue);
+					ctx.set(defaultValueCtx, defaultValue);
 				})
 				.config(nord)
 				.use(commonmark)
@@ -58,10 +59,51 @@ export function MilkdownEditor() {
 				.use(indent)
 				.use(history)
 				.use(slash),
-		[resolvedTheme]
+		[resolvedTheme, defaultValue]
 	);
 
-	return <Milkdown />;
+	useEffect(() => {
+		if (!editor.loading) {
+			editor.get()?.ctx.set(slash.key, {
+				view: pluginViewFactory({
+					component: CommandSlashCard
+				})
+			});
+		}
+	}, [editor.loading]);
+
+	useEffect(() => {
+		if (editor.loading) {
+			return;
+		}
+		if (editor.get()) {
+			console.log('defaultValue', defaultValue);
+			editor.get()?.action((ctx) => {
+				const view = ctx.get(editorViewCtx);
+				const parser = ctx.get(parserCtx);
+				const doc = parser(defaultValue || '');
+				if (!doc) {
+					return;
+				}
+				const state = view.state;
+				view.dispatch(
+					state.tr.replace(
+						0,
+						state.doc.content.size,
+						new Slice(doc.content, 0, 0)
+					)
+				);
+			});
+		}
+	}, [defaultValue]);
+
+	return (
+		<Spin spinning={editor.loading}>
+			<div className="min-h-96 max-h-[800px] bg-[url('/grid-black.svg')] dark:bg-[url('/grid.svg')] bg-top bg-repeat px-3 py-4 border overflow-auto">
+				<Milkdown />
+			</div>
+		</Spin>
+	);
 }
 
 export function MilkdownEditorWrapper() {

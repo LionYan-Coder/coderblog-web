@@ -116,6 +116,7 @@ export function ResizableLayout({
 				defaultSize={defaultLayout[1]}
 				minSize={30}
 				className="transition-all duration-300 ease-in-out h-screen !overflow-auto"
+				id="content"
 			>
 				<div className="w-full flex flex-col">
 					<Header />

@@ -102,6 +102,10 @@ const config = {
 			},
 			fontFamily: {
 				sans: ['var(--font-sans)', ...fontFamily.sans]
+			},
+			boxShadow: {
+				'table-right': 'inset -10px 0 8px -8px rgba(5, 5, 5, 0.06)',
+				'table-left': 'inset 10px 0 8px -8px rgba(5, 5, 5, 0.06)'
 			}
 		}
 	},

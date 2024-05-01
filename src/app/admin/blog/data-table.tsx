@@ -1,16 +1,50 @@
 'use client';
 
 import {
-	AccessorKeyColumnDefBase,
+	Column,
 	getCoreRowModel,
 	getPaginationRowModel
 } from '@tanstack/table-core';
 import { flexRender, useReactTable } from '@tanstack/react-table';
 import { Empty, Table, TablePagination, Skeleton } from '~/components';
 import { useColumns } from '~/app/admin/blog/columns';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { CSSProperties, useEffect, useState } from 'react';
 import { useHttp } from '~/http';
 import { cn } from '~/lib/utils';
+import { clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
+const getCommonPinningClass = <T = any,>(column: Column<T>) => {
+	const isPinned = column.getIsPinned();
+	const isLastLeftPinnedColumn =
+		isPinned === 'left' && column.getIsLastColumn('left');
+	const isFirstRightPinnedColumn =
+		isPinned === 'right' && column.getIsFirstColumn('right');
+
+	return twMerge(
+		clsx(
+			isLastLeftPinnedColumn &&
+				'after:shadow-table-left after:right-0 after:translate-x-full',
+			isFirstRightPinnedColumn &&
+				'after:shadow-table-right after:left-0 after:-translate-x-full',
+			// isPinned && 'transition-colors bg-background group-hover:bg-muted/50',
+			isPinned
+				? 'after:content-[""] after:absolute after:top-0 after:bottom-0 after:w-[30px] after:pointer-events-auto'
+				: 'truncate'
+		)
+	);
+};
+
+const getCommonPinningStyles = (column: Column<Article>): CSSProperties => {
+	const isPinned = column.getIsPinned();
+	return {
+		left: isPinned === 'left' ? `${column.getStart('left')}px` : undefined,
+		right: isPinned === 'right' ? `${column.getAfter('right')}px` : undefined,
+		position: isPinned ? 'sticky' : 'relative',
+		width: isPinned ? column.getSize() : 'inherit',
+		zIndex: isPinned ? 1 : 0
+	};
+};
 
 export function DataTable() {
 	const { fetchArticleList } = useHttp();
@@ -22,7 +56,12 @@ export function DataTable() {
 		data: tableData,
 		columns,
 		getCoreRowModel: getCoreRowModel(),
-		getPaginationRowModel: getPaginationRowModel()
+		getPaginationRowModel: getPaginationRowModel(),
+		state: {
+			columnPinning: {
+				right: ['operator']
+			}
+		}
 	});
 
 	async function getData() {
@@ -42,9 +81,13 @@ export function DataTable() {
 			<Table>
 				<Table.Header>
 					{table.getHeaderGroups().map((headerGroup) => (
-						<Table.Row key={headerGroup.id}>
+						<Table.Row key={'group' + headerGroup.id}>
 							{headerGroup.headers.map((header) => (
-								<Table.Head key={header.id}>
+								<Table.Head
+									key={header.id}
+									style={getCommonPinningStyles(header.column)}
+									className={getCommonPinningClass(header.column)}
+								>
 									{header.isPlaceholder
 										? null
 										: flexRender(
@@ -61,11 +104,15 @@ export function DataTable() {
 						{table.getRowModel().rows?.length ? (
 							table.getRowModel().rows.map((row) => (
 								<Table.Row
-									key={row.id}
+									key={'row' + row.id}
 									data-state={row.getIsSelected() && 'selected'}
 								>
 									{row.getVisibleCells().map((cell) => (
-										<Table.Cell key={cell.id}>
+										<Table.Cell
+											key={cell.id}
+											style={getCommonPinningStyles(cell.column)}
+											className={getCommonPinningClass(cell.column)}
+										>
 											{cell.getValue() !== ''
 												? flexRender(
 														cell.column.columnDef.cell,
@@ -77,8 +124,9 @@ export function DataTable() {
 								</Table.Row>
 							))
 						) : (
-							<Table.Row>
+							<Table.Row key="empty">
 								<Table.Cell
+									key="emptycell"
 									colSpan={columns.length}
 									className="h-32 text-center"
 								>
@@ -90,23 +138,10 @@ export function DataTable() {
 				) : (
 					<Table.Body>
 						{Array.from({ length: 7 }, (_, index) => index).map((index) => (
-							<Table.Row key={index}>
+							<Table.Row key={'placeholder' + index}>
 								{columns.map((column) => (
-									<Table.Cell
-										key={
-											(column as AccessorKeyColumnDefBase<Article>).accessorKey
-										}
-									>
-										<Skeleton
-											className={cn(
-												'w-[120px] h-6',
-												(column as AccessorKeyColumnDefBase<Article>)
-													.accessorKey === 'coverUrl' &&
-													'aspect-video w-[300px]',
-												(column as AccessorKeyColumnDefBase<Article>)
-													.accessorKey === 'id' && 'w-8'
-											)}
-										/>
+									<Table.Cell key={column.id}>
+										<Skeleton className={cn('h-6')} />
 									</Table.Cell>
 								))}
 							</Table.Row>

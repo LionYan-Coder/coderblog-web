@@ -1,16 +1,13 @@
 'use client';
-import { ColumnDef } from '@tanstack/table-core';
 import Image from 'next/image';
-import { Setting2Icon } from '~/assets';
 import {
-	Button,
 	DataTableOperatorDropdownMenu,
 	OperatorHeader,
-	CardStatus,
-	Popover
+	CardStatus
 } from '~/components';
 import { useHttp } from '~/http';
 import { useRouter } from 'next/navigation';
+import { ColumnDef } from '@tanstack/table-core';
 
 export const useColumns = ({ refresh }: { refresh?: () => Promise<void> }) => {
 	const router = useRouter();
@@ -27,43 +24,51 @@ export const useColumns = ({ refresh }: { refresh?: () => Promise<void> }) => {
 		refresh?.();
 	}
 
-	const columns: ColumnDef<Article, any>[] = [
-		{ accessorKey: 'id', header: 'ID' },
+	const columns: ColumnDef<Article>[] = [
+		{ id: 'id', accessorKey: 'id', header: 'ID', size: 48 },
 		{
+			id: 'coverUrl',
 			accessorKey: 'coverUrl',
 			header: '封面',
 			cell: (props) => (
 				<Image
-					src={props.getValue()}
+					src={props.getValue<string>()}
 					alt="封面"
-					width={300}
+					width={200}
 					height={300}
-					className="min-w-[300px] aspect-video h-40 object-cover"
+					priority={false}
+					className="w-32 aspect-video object-cover"
 				/>
 			)
 		},
 		{
+			id: 'title',
 			accessorKey: 'title',
 			header: '标题',
-			cell: (props) => <p className="font-medium">{props.getValue()}</p>
+			cell: (props) => <p className="font-medium">{props.getValue<string>()}</p>
 		},
-		{ accessorKey: 'summary', header: '概要' },
-		{ accessorKey: 'tags', header: '标签' },
+		{ id: 'summary', accessorKey: 'summary', header: '概要' },
+		{ id: 'tags', accessorKey: 'tags', header: '标签' },
 		{
+			id: 'published',
 			accessorKey: 'published',
 			header: '状态',
-			cell: (props) => (
-				<CardStatus
-					published={props.getValue()}
-					publishedText="已发布"
-					unPublishedText="草稿箱"
-					dot={false}
-					className="inline-flex px-2 py-1"
-				/>
-			)
+			cell: (props) => {
+				console.log('published', props.getValue(), props);
+				return (
+					<CardStatus
+						published={props.getValue<boolean>()}
+						publishedText="已发布"
+						unPublishedText="草稿箱"
+						dot={false}
+						className="inline-flex px-2 py-1"
+					/>
+				);
+			}
 		},
-		{ accessorKey: 'author', header: '作者' },
+		{ id: 'author', accessorKey: 'author', header: '作者' },
 		{
+			id: 'timeAt',
 			accessorKey: 'timeAt',
 			header: '操作时间',
 			cell: (props) => {
@@ -72,18 +77,20 @@ export const useColumns = ({ refresh }: { refresh?: () => Promise<void> }) => {
 					<div className="text-muted-foreground max-w-48">
 						<p className="flex justify-between space-x-1">
 							<span>create</span>
-							<span>{createAt}</span>
+							<span className="text-center">{createAt}</span>
 						</p>
 						<p className="flex justify-between space-x-1">
 							<span>update</span>
-							<span>{updateAt}</span>
+							<span className="text-center">{updateAt}</span>
 						</p>
 					</div>
 				);
 			}
 		},
 		{
+			id: 'operator',
 			accessorKey: 'operator',
+			size: 60,
 			header: ({ table }) => <OperatorHeader />,
 			cell: (props) => (
 				<DataTableOperatorDropdownMenu

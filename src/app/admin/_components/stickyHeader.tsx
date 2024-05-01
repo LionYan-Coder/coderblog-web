@@ -1,3 +1,5 @@
+'use client';
+
 import { ReactNode } from 'react';
 import { cn } from '~/lib/utils';
 
@@ -9,7 +11,7 @@ export function StickyHeader({
 	className?: string;
 }) {
 	return (
-		<div className={cn('sm:sticky z-10 sm:top-2 backdrop-blur-xl', className)}>
+		<div className={cn('z-10 sm:top-2 backdrop-blur-xl', className)}>
 			{children}
 		</div>
 	);

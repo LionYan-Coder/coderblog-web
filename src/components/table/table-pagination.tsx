@@ -22,6 +22,7 @@ export function TablePagination<TData>({
 				</div>
 				<div className="flex items-center space-x-2">
 					<Button
+						key="previous1"
 						variant="outline"
 						className="hidden h-8 w-8 p-0 lg:flex"
 						onClick={() => table.setPageIndex(0)}
@@ -31,6 +32,7 @@ export function TablePagination<TData>({
 						<DoubleArrowLeftIcon className="h-4 w-4" />
 					</Button>
 					<Button
+						key="previous2"
 						variant="outline"
 						className="h-8 w-8 p-0"
 						onClick={() => table.previousPage()}
@@ -40,6 +42,7 @@ export function TablePagination<TData>({
 						<ChevronLeftIcon className="h-4 w-4" />
 					</Button>
 					<Button
+						key="next1"
 						variant="outline"
 						className="h-8 w-8 p-0"
 						onClick={() => table.nextPage()}
@@ -49,6 +52,7 @@ export function TablePagination<TData>({
 						<ChevronRightIcon className="h-4 w-4" />
 					</Button>
 					<Button
+						key="next2"
 						variant="outline"
 						className="hidden h-8 w-8 p-0 lg:flex"
 						onClick={() => table.setPageIndex(table.getPageCount() - 1)}

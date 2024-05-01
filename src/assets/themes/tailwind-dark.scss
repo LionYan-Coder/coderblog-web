@@ -57,9 +57,6 @@
   --md-grid-active: var(--md-grid-active-inverted);
   --md-grid-border-color: var(--md-grid-border-color-inverted);
 
-  @apply min-h-96 bg-[url('/grid.svg')] bg-top bg-repeat px-3 py-4 border overflow-auto;
-  max-height: 600px;
-
   & {
     .ty-file-search-match-text {
       background-color: var(--search-hit-text-bg-color);

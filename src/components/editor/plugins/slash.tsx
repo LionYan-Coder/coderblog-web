@@ -1,5 +1,5 @@
 'use client';
-import { Card, DropdownMenu, Separator } from '~/components';
+import { Card, Separator } from '~/components';
 import {
 	BulletedListIcon,
 	CalloutIcon,
@@ -21,7 +21,6 @@ import {
 	ToggleListIcon,
 	VideoIcon
 } from '~/assets/icons/editor';
-import { cn } from '~/lib/utils';
 import { ReactNode, useCallback, useEffect, useRef, MouseEvent } from 'react';
 import { slashFactory, SlashProvider } from '@milkdown/plugin-slash';
 import { useInstance } from '@milkdown/react';
@@ -149,7 +148,6 @@ export function CommandSlashCard() {
 	const command = (e: MouseEvent<any>, key?: CmdKey<any>, payload?: any) => {
 		e.preventDefault();
 		if (key) {
-			console.log('key', key.name);
 			action((ctx) => {
 				const view = ctx.get(editorViewCtx);
 				const { dispatch, state } = view;

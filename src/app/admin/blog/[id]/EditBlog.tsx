@@ -106,10 +106,11 @@ export function EditBlog({ article }: EditBlogProps) {
 	}
 
 	useEffect(() => {
-		if (currentArticle?.content) {
-			context.setDefaultValue(currentArticle?.content);
+		console.log('article', article);
+		if (article?.content) {
+			context.setDefaultValue(article?.content || '');
 		}
-	}, [context, currentArticle?.content]);
+	}, [article?.content]);
 
 	return (
 		<div className="md:max-w-6xl mx-auto">
@@ -145,8 +146,8 @@ export function EditBlog({ article }: EditBlogProps) {
 					</Button>
 				</div>
 			</StickyHeader>
-			<div className="grid gap-4 md:grid-cols-[1fr_224px] lg:grid-cols-4 lg:gap-8 mb-4">
-				<div className="grid auto-rows-max gap-4 lg:col-span-3 lg:gap-8 order-2 md:order-first">
+			<div className="grid gap-4 md:grid-cols-[1fr_255px] lg:grid-cols-4 lg:gap-8 mb-4">
+				<div className="grid auto-rows-max gap-4 md:col-span-3 lg:gap-8 order-2 md:order-first">
 					<Card>
 						<Card.Header>
 							<Card.Title>博客详细</Card.Title>
@@ -236,7 +237,7 @@ export function EditBlog({ article }: EditBlogProps) {
 					{currentArticle?.id && (
 						<EntityDeleteButton
 							onConfirm={handleDelete}
-							buttonProps={{ className: 'hidden sm:inline-flex' }}
+							buttonProps={{ className: 'hidden md:inline-flex' }}
 						/>
 					)}
 				</div>
@@ -257,7 +258,7 @@ export function EditBlog({ article }: EditBlogProps) {
 				</div>
 			</div>
 
-			<div className="flex items-center gap-4 sm:hidden">
+			<div className="flex items-center gap-4 md:hidden">
 				{currentArticle?.id && <EntityDeleteButton onConfirm={handleDelete} />}
 				<div className="flex ml-auto items-center gap-2">
 					<Button
