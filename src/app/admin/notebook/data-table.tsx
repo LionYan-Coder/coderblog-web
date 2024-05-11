@@ -2,18 +2,19 @@
 
 import { getCoreRowModel, getPaginationRowModel } from '@tanstack/table-core';
 import { flexRender, useReactTable } from '@tanstack/react-table';
-import { Empty, Table, TablePagination, Skeleton, toast } from '~/components';
-import { useColumns } from '~/app/admin/blog/columns';
+import { Empty, Table, TablePagination, Skeleton } from '~/components';
+import { useColumns } from '~/app/admin/notebook/columns';
 import { useEffect, useState } from 'react';
 import { cn, getCommonPinningClass, getCommonPinningStyles } from '~/lib/utils';
-import { useArticleApi } from '~/app/admin/blog/useArticleApi';
+import { useNotebookApi } from '~/app/admin/notebook/useNotebookApi';
 
 export function DataTable() {
-	const { fetchArticleList } = useArticleApi();
+	const { fetchNotebookList } = useNotebookApi();
+
 	const [loading, setLoading] = useState<boolean>(true);
-	const [tableData, setTableData] = useState<Article[]>([]);
+	const [tableData, setTableData] = useState<Notebook[]>([]);
 	const { columns } = useColumns({ refresh: getData });
-	const table = useReactTable<Article>({
+	const table = useReactTable<Notebook>({
 		data: tableData,
 		columns,
 		getCoreRowModel: getCoreRowModel(),
@@ -22,12 +23,13 @@ export function DataTable() {
 			columnPinning: {
 				right: ['operator']
 			}
-		}
+		},
+		debugTable: true
 	});
 
 	async function getData() {
 		setLoading(true);
-		const { list, total, page } = await fetchArticleList().finally(() =>
+		const { list, total, page } = await fetchNotebookList().finally(() =>
 			setLoading(false)
 		);
 		setTableData(list || []);

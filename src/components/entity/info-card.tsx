@@ -1,9 +1,9 @@
 import { Card } from '~/components/ui';
 
 interface EntityInfo {
-	createAt: string;
-	updateAt: string;
-	author: string;
+	createAt?: string;
+	updateAt?: string;
+	author?: string;
 }
 
 interface EntityInfoCardProps {

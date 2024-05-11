@@ -1,10 +1,10 @@
-import { EditBlog } from './EditBlog';
+import { EditNotebook } from './EditNotebook';
 import http from '~/http';
 import { EResponseCode } from '~/config/enum';
 
-async function fetchArticleDetail(id: number) {
+async function fetchNotebookDetail(id: number) {
 	const { code, data, message } = await http<Article>(
-		`/admin/article/${id}`,
+		`/admin/notebook/${id}`,
 		'GET'
 	);
 
@@ -21,17 +21,17 @@ interface IProps {
 export async function generateMetadata({ params }: IProps) {
 	const article =
 		Number(params.id) !== 0
-			? await fetchArticleDetail(Number(params.id))
+			? await fetchNotebookDetail(Number(params.id))
 			: undefined;
 	return {
-		title: article?.title || '新建博客'
+		title: article?.title || '新建笔记'
 	};
 }
 
 export default async function Page({ params }: IProps) {
 	const article =
 		Number(params.id) !== 0
-			? await fetchArticleDetail(Number(params.id))
+			? await fetchNotebookDetail(Number(params.id))
 			: undefined;
-	return <EditBlog article={article} />;
+	return <EditNotebook article={article} />;
 }

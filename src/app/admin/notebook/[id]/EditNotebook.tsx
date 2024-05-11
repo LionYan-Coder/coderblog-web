@@ -7,7 +7,6 @@ import {
 	BadgeStatus,
 	Form,
 	Input,
-	UploadImage,
 	EntityDeleteButton,
 	MarkdownEditor
 } from '~/components';
@@ -20,10 +19,10 @@ import { StickyHeader } from '~/app/admin/_components/stickyHeader';
 import { useEffect, useMemo, useState } from 'react';
 import { CardStatus } from '~/components/entity/card-status';
 import { useRouter } from 'next/navigation';
-import { useArticleApi } from '~/app/admin/blog/useArticleApi';
-import { ProsemirrorAdapterProvider } from '@prosemirror-adapter/react';
-import { MilkdownProvider } from '@milkdown/react';
 import { useEditorState } from '~/hooks/useEditor';
+import { useNotebookApi } from '~/app/admin/notebook/useNotebookApi';
+import { MilkdownProvider } from '@milkdown/react';
+import { ProsemirrorAdapterProvider } from '@prosemirror-adapter/react';
 
 const formSchema = z.object({
 	title: z
@@ -35,36 +34,36 @@ const formSchema = z.object({
 		.max(30, '标题不能超过30个字符'),
 
 	summary: z.string().trim().max(120, '概要不能超过120个字符'),
-	tags: z.string().max(30, '标记不能超过30个字符'),
-	coverUrl: z.string().min(1, '缺少封面').url({ message: '地址不合法' })
+	tags: z.string().max(30, '标记不能超过30个字符')
 });
 
 interface EditBlogProps {
-	article?: Article;
+	article?: Notebook;
 }
 
-export function EditBlog({ article }: EditBlogProps) {
+export function EditNotebook({ article }: EditBlogProps) {
 	const router = useRouter();
 	const {
-		fetchUpdateArticle,
-		fetchCreateArticle,
-		fetchPublishArticle,
-		fetchDeleteArticle
-	} = useArticleApi();
-
-	const [currentArticle, setCurrentArticle] = useState<Partial<Article>>({
-		...article
-	});
+		fetchDeleteNotebook,
+		fetchCreateNotebook,
+		fetchUpdateNotebook,
+		fetchPublishNotebook
+	} = useNotebookApi();
+	const [currentNotebook, setCurrentNotebook] = useState<Notebook | undefined>(
+		article
+	);
 	const { defaultValue, setValue, setDefaultValue } = useEditorState();
 	const [saveLoading, setSaveLoading] = useState(false);
 	const [publishLoading, setPublishLoading] = useState(false);
+	const editorDefaultValue = useMemo(() => {
+		return article?.content;
+	}, [article?.content]);
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			title: currentArticle?.title || '',
-			summary: currentArticle?.summary || '',
-			tags: currentArticle?.tags?.join(',') || '',
-			coverUrl: currentArticle?.coverUrl || ''
+			title: currentNotebook?.title || '',
+			summary: currentNotebook?.summary || '',
+			tags: currentNotebook?.tags.join(',') || ''
 		}
 	});
 
@@ -75,28 +74,28 @@ export function EditBlog({ article }: EditBlogProps) {
 			tags: formData.tags.split(',')
 		};
 		const { id } = await (
-			currentArticle?.id
-				? fetchUpdateArticle(currentArticle?.id, params)
-				: fetchCreateArticle(params)
+			currentNotebook?.id
+				? fetchUpdateNotebook(currentNotebook?.id, params)
+				: fetchCreateNotebook(params)
 		).finally(() => setSaveLoading(false));
 		id && router.replace('/admin/blog/' + id);
 	}
 
 	async function handleDelete() {
-		await fetchDeleteArticle(currentArticle?.id || 0);
+		await fetchDeleteNotebook(currentNotebook?.id || 0);
 		router.back();
 		return true;
 	}
 
 	async function handlePublish() {
 		setPublishLoading(true);
-		await fetchPublishArticle(
-			currentArticle?.id || 0,
-			!currentArticle?.published
+		await fetchPublishNotebook(
+			currentNotebook?.id || 0,
+			!currentNotebook?.published
 		).finally(() => setPublishLoading(false));
 
-		setCurrentArticle((origin) => ({
-			...(origin as Article),
+		setCurrentNotebook((origin) => ({
+			...(origin as Notebook),
 			published: !origin?.published
 		}));
 	}
@@ -112,16 +111,16 @@ export function EditBlog({ article }: EditBlogProps) {
 			<StickyHeader className="flex items-center gap-4 mb-4">
 				<BackButton />
 				<h1 className="text-xl font-semibold tracking-tight whitespace-nowrap">
-					{currentArticle?.id ? currentArticle.title : '新建博客'}
+					{currentNotebook?.id ? currentNotebook.title : '新建笔记'}
 				</h1>
 				<BadgeStatus
-					published={currentArticle?.published}
+					published={currentNotebook?.published}
 					className="ml-auto sm:ml-0"
 				/>
 				<div className="hidden md:flex md:ml-auto items-center gap-2">
 					<Button
 						variant="success"
-						disabled={!currentArticle?.id}
+						disabled={!currentNotebook?.id}
 						onClick={handlePublish}
 					>
 						{publishLoading ? (
@@ -129,7 +128,7 @@ export function EditBlog({ article }: EditBlogProps) {
 						) : (
 							<ArrowUpToLineIcon className="mr-2" />
 						)}
-						{currentArticle?.published ? '撤销发布' : '发布'}
+						{currentNotebook?.published ? '撤销发布' : '发布'}
 					</Button>
 					<Button onClick={() => form.handleSubmit(handleSubmit)()}>
 						{saveLoading ? (
@@ -141,19 +140,18 @@ export function EditBlog({ article }: EditBlogProps) {
 					</Button>
 				</div>
 			</StickyHeader>
-
 			<div className="grid gap-4 md:grid-cols-[1fr_255px] lg:grid-cols-4 lg:gap-8 mb-4">
 				<div className="grid auto-rows-max gap-4 md:col-span-3 lg:gap-8 order-2 md:order-first">
 					<Card>
 						<Card.Header>
-							<Card.Title>博客详细</Card.Title>
+							<Card.Title>笔记详细</Card.Title>
 							<Card.Description>
-								这里填写的信息，会显示在博客列表
+								这里填写的信息，会显示在笔记列表
 							</Card.Description>
 						</Card.Header>
 						<Card.Content>
-							<div className="grid sm:grid-cols-2 gap-6">
-								<Form {...form}>
+							<Form {...form}>
+								<div className="grid sm:grid-cols-2 gap-6">
 									<Form.Field
 										control={form.control}
 										name="title"
@@ -161,7 +159,7 @@ export function EditBlog({ article }: EditBlogProps) {
 											<Form.Item>
 												<Form.Label>标题</Form.Label>
 												<Form.Control>
-													<Input placeholder="博客标题" {...field} />
+													<Input placeholder="笔记标题" {...field} />
 												</Form.Control>
 												<Form.Message />
 											</Form.Item>
@@ -174,7 +172,7 @@ export function EditBlog({ article }: EditBlogProps) {
 											<Form.Item>
 												<Form.Label>标记</Form.Label>
 												<Form.Control>
-													<Input placeholder="博客标记" {...field} />
+													<Input placeholder="笔记标记" {...field} />
 												</Form.Control>
 												<Form.Description>
 													每个标记后使用 “,” 相接
@@ -194,7 +192,7 @@ export function EditBlog({ article }: EditBlogProps) {
 													<Form.Control>
 														<Textarea
 															rows={5}
-															placeholder="博客概要"
+															placeholder="笔记概要"
 															{...field}
 														/>
 													</Form.Control>
@@ -203,34 +201,16 @@ export function EditBlog({ article }: EditBlogProps) {
 											)}
 										/>
 									</div>
-									<div className="sm:col-span-2">
-										<Form.Field
-											control={form.control}
-											name="coverUrl"
-											render={({ field: { onChange, value } }) => (
-												<Form.Item>
-													<Form.Label>封面</Form.Label>
-													<Form.Control>
-														<UploadImage
-															value={value}
-															onUploadComplete={(data) => onChange(data.url)}
-														/>
-													</Form.Control>
-													<Form.Message />
-												</Form.Item>
-											)}
-										/>
-									</div>
-								</Form>
-							</div>
+								</div>
+							</Form>
 						</Card.Content>
 					</Card>
 				</div>
 
 				<div className="grid auto-rows-max gap-4 order-first md:order-2">
-					<CardStatus published={currentArticle?.published} />
-					<InfoCard entity={currentArticle} />
-					{currentArticle?.id && (
+					<CardStatus published={currentNotebook?.published} />
+					<InfoCard entity={currentNotebook} />
+					{currentNotebook?.id && (
 						<EntityDeleteButton
 							onConfirm={handleDelete}
 							buttonProps={{ className: 'hidden md:inline-flex' }}
@@ -240,7 +220,7 @@ export function EditBlog({ article }: EditBlogProps) {
 				<div className="md:col-span-4 order-last">
 					<Card>
 						<Card.Header>
-							<Card.Title>博客内容</Card.Title>
+							<Card.Title>笔记内容</Card.Title>
 							<Card.Description>
 								通过Milkdown富文本编辑器编写MDX内容
 							</Card.Description>
@@ -255,12 +235,13 @@ export function EditBlog({ article }: EditBlogProps) {
 					</Card>
 				</div>
 			</div>
+
 			<div className="flex items-center gap-4 md:hidden">
-				{currentArticle?.id && <EntityDeleteButton onConfirm={handleDelete} />}
+				{currentNotebook?.id && <EntityDeleteButton onConfirm={handleDelete} />}
 				<div className="flex ml-auto items-center gap-2">
 					<Button
 						variant="success"
-						disabled={!currentArticle?.id}
+						disabled={!currentNotebook?.id}
 						onClick={handlePublish}
 					>
 						{publishLoading ? (
@@ -268,7 +249,7 @@ export function EditBlog({ article }: EditBlogProps) {
 						) : (
 							<ArrowUpToLineIcon className="mr-2" />
 						)}
-						{currentArticle?.published ? '撤销发布' : '发布'}
+						{currentNotebook?.published ? '撤销发布' : '发布'}
 					</Button>
 					<Button onClick={() => form.handleSubmit(handleSubmit)()}>
 						{saveLoading ? (

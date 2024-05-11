@@ -7,7 +7,7 @@ import {
 	useState
 } from 'react';
 
-export function useEditor() {
+export function useEditorState() {
 	const [defaultValue, setDefaultValue] = useState('');
 	const [value, setValue] = useState('');
 
@@ -25,17 +25,3 @@ export function useEditor() {
 		[value, defaultValue]
 	);
 }
-
-export const EditorContext = createContext<ReturnType<typeof useEditor> | null>(
-	null
-);
-
-export const useEditorContext = () => {
-	const context = useContext(EditorContext);
-
-	if (context == null) {
-		throw new Error('_components must be wrapped in AppContext');
-	}
-
-	return context;
-};

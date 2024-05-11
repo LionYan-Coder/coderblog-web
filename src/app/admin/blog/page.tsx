@@ -1,6 +1,5 @@
 import { Metadata } from 'next';
 import { DataTable } from '~/app/admin/blog/data-table';
-import { fetchArticleList } from '~/app/admin/blog/api';
 import { Button } from '~/components/ui';
 import { PlusIcon } from '~/assets';
 import Link from 'next/link';

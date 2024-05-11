@@ -1,5 +1,4 @@
 'use client';
-import Image from 'next/image';
 import {
 	DataTableOperatorDropdownMenu,
 	OperatorHeader,
@@ -8,47 +7,32 @@ import {
 import { useRouter } from 'next/navigation';
 import { ColumnDef } from '@tanstack/table-core';
 import Link from 'next/link';
-import { useArticleApi } from '~/app/admin/blog/useArticleApi';
+import { useNotebookApi } from '~/app/admin/notebook/useNotebookApi';
 
 export const useColumns = ({ refresh }: { refresh?: () => Promise<void> }) => {
 	const router = useRouter();
-	const { fetchDeleteArticle, fetchPublishArticle } = useArticleApi();
+	const { fetchDeleteNotebook, fetchPublishNotebook } = useNotebookApi();
 
-	async function handleDelete(row: Article) {
-		await fetchDeleteArticle(row.id);
+	async function handleDelete(row: Notebook) {
+		await fetchDeleteNotebook(row.id);
 		refresh?.();
 		return true;
 	}
 
-	async function handlePublish(row: Article, publish: boolean) {
-		await fetchPublishArticle(row.id, publish);
+	async function handlePublish(row: Notebook, publish: boolean) {
+		await fetchPublishNotebook(row.id, publish);
 		refresh?.();
 	}
 
-	const columns: ColumnDef<Article>[] = [
+	const columns: ColumnDef<Notebook>[] = [
 		{ id: 'id', accessorKey: 'id', header: 'ID', size: 48 },
-		{
-			id: 'coverUrl',
-			accessorKey: 'coverUrl',
-			header: '封面',
-			cell: (props) => (
-				<Image
-					src={props.getValue<string>()}
-					alt="封面"
-					width={200}
-					height={300}
-					priority={false}
-					className="w-32 aspect-video object-cover"
-				/>
-			)
-		},
 		{
 			id: 'title',
 			accessorKey: 'title',
 			header: '标题',
 			cell: (props) => (
 				<Link
-					href={`/admin/blog/${props.row.original.id}`}
+					href={`/admin/notebook/${props.row.original.id}`}
 					className="font-medium hover:underline underline-offset-2"
 				>
 					{props.getValue<string>()}
@@ -103,7 +87,7 @@ export const useColumns = ({ refresh }: { refresh?: () => Promise<void> }) => {
 					editText="编辑博客"
 					deleteText="删除博客"
 					publishText={{ published: '发布播客', unpublished: '撤销播客' }}
-					onEdit={(row) => router.push(`/admin/blog/${row.id}`)}
+					onEdit={(row) => router.push(`/admin/notebook/${row.id}`)}
 					onConfirm={handleDelete}
 					onPublish={(row) => handlePublish(row, true)}
 					onUnPublish={(row) => handlePublish(row, false)}
