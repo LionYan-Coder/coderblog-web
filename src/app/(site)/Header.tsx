@@ -124,7 +124,7 @@ export function Header() {
 		<>
 			<motion.header
 				className={cn(
-					'relative w-full z-50 flex flex-col mb-[var(--header-mb,0px)]',
+					'relative w-full z-10 flex flex-col mb-[var(--header-mb,0px)]',
 					isHomePage
 						? 'h-[var(--header-height,180px)]'
 						: 'h-[var(--header-height,64px)]'

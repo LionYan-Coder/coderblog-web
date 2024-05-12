@@ -28,18 +28,18 @@ export function BlogArticles({ articles }: { articles: Article[] }) {
 export function RecentBlogArticles({ articles }: { articles: Article[] }) {
 	return (
 		<motion.div
+			className="space-y-16"
 			variants={{
 				initial: { opacity: 0 },
 				animate: {
 					opacity: 1,
 					transition: {
-						staggerChildren: 0.3
+						staggerChildren: 0.2
 					}
 				}
 			}}
 			initial="initial"
 			whileInView="animate"
-			className="flex flex-col gap-16"
 		>
 			{articles.map((article) => (
 				<RecentBlogArticleCard key={article.id} article={article} />

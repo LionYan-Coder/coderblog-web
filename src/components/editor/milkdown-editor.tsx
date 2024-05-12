@@ -3,9 +3,7 @@
 import {
 	defaultValueCtx,
 	Editor,
-	editorViewCtx,
 	editorViewOptionsCtx,
-	parserCtx,
 	rootCtx
 } from '@milkdown/core';
 import { nord } from '@milkdown/theme-nord';
@@ -17,14 +15,13 @@ import { history } from '@milkdown/plugin-history';
 import { prism } from '@milkdown/plugin-prism';
 import { indent } from '@milkdown/plugin-indent';
 import { useTheme } from 'next-themes';
-
-import '~/assets/themes/tailwind.scss';
-import '~/assets/themes/tailwind-dark.scss';
 import { CommandSlashCard, slash } from '~/components/editor/plugins/slash';
 import { usePluginViewFactory } from '@prosemirror-adapter/react';
 import { useEffect } from 'react';
-import { Slice } from 'prosemirror-model';
 import { Spin } from '~/components';
+
+import '~/assets/themes/tailwind.scss';
+import '~/assets/themes/tailwind-dark.scss';
 
 interface EditorProps {
 	value?: string;
@@ -48,7 +45,6 @@ export function MarkdownEditor({ value, onChange }: EditorProps) {
 							onChange?.(markdown);
 						});
 					ctx.set(rootCtx, root);
-					console.log('value', value);
 					ctx.set(defaultValueCtx, value || '');
 				})
 				.config(nord)
@@ -100,4 +96,26 @@ export function MarkdownEditor({ value, onChange }: EditorProps) {
 			</div>
 		</Spin>
 	);
+}
+export function MarkdownText({ value }: EditorProps) {
+	const { resolvedTheme } = useTheme();
+	const editor = useEditor(
+		(root) =>
+			Editor.make()
+				.config((ctx) => {
+					ctx.update(editorViewOptionsCtx, (prev) => ({
+						...prev,
+						attributes: { class: `milkdown-theme-${resolvedTheme}` },
+						editable: () => false
+					}));
+					ctx.set(rootCtx, root);
+					ctx.set(defaultValueCtx, value || '');
+				})
+				.config(nord)
+				.use(commonmark)
+				.use(prism),
+		[resolvedTheme, value]
+	);
+
+	return <Milkdown />;
 }

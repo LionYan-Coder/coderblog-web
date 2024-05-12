@@ -34,7 +34,8 @@ const formSchema = z.object({
 		.max(30, '标题不能超过30个字符'),
 
 	summary: z.string().trim().max(120, '概要不能超过120个字符'),
-	tags: z.string().max(30, '标记不能超过30个字符')
+	tags: z.string().max(30, '标记不能超过30个字符'),
+	content: z.string().trim()
 });
 
 interface EditBlogProps {
@@ -63,7 +64,8 @@ export function EditNotebook({ article }: EditBlogProps) {
 		defaultValues: {
 			title: currentNotebook?.title || '',
 			summary: currentNotebook?.summary || '',
-			tags: currentNotebook?.tags.join(',') || ''
+			tags: currentNotebook?.tags.join(',') || '',
+			content: currentNotebook?.content || ''
 		}
 	});
 
@@ -105,6 +107,10 @@ export function EditNotebook({ article }: EditBlogProps) {
 			setDefaultValue(article?.content);
 		}
 	}, [article?.content]);
+
+	function handleChangeContent(content: string) {
+		form.setValue('content', content);
+	}
 
 	return (
 		<div className="md:max-w-6xl mx-auto">
@@ -228,7 +234,10 @@ export function EditNotebook({ article }: EditBlogProps) {
 						<Card.Content>
 							<MilkdownProvider>
 								<ProsemirrorAdapterProvider>
-									<MarkdownEditor value={defaultValue} />
+									<MarkdownEditor
+										onChange={handleChangeContent}
+										value={defaultValue}
+									/>
 								</ProsemirrorAdapterProvider>
 							</MilkdownProvider>
 						</Card.Content>

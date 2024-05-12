@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { ArrowRightIcon, CalendarIcon } from '~/assets';
 
-export function NoteItem({ note }: { note: Note }) {
+export function NoteItem({ note }: { note: Notebook }) {
 	return (
 		<motion.article
 			variants={{
@@ -52,7 +52,7 @@ export function NoteItem({ note }: { note: Note }) {
 	);
 }
 
-export function NoteList({ notes }: { notes: Note[] }) {
+export function NoteList({ notes }: { notes: Notebook[] }) {
 	return (
 		<motion.div
 			className="max-w-3xl flex flex-col space-y-16"

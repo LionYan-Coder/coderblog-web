@@ -48,7 +48,7 @@ function MobileNav({ className }: { className?: string }) {
 				<nav className="mt-4">
 					<ul className="divide-y text-base  text-zinc-800 dark:text-zinc-300 divide-zinc-500/20 flex flex-col">
 						{Navs.map((nav) => (
-							<li key={nav.link}>
+							<li key={nav.link} onClick={() => setDialogOpen(false)}>
 								<Link href={nav.link} className="py-3 block">
 									{nav.label}
 								</Link>

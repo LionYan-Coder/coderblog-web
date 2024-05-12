@@ -55,7 +55,14 @@ export const useColumns = ({ refresh }: { refresh?: () => Promise<void> }) => {
 				</Link>
 			)
 		},
-		{ id: 'summary', accessorKey: 'summary', header: '概要' },
+		{
+			id: 'summary',
+			accessorKey: 'summary',
+			header: '概要',
+			cell: (props) => (
+				<p className="truncate max-w-80">{props.getValue<string>()}</p>
+			)
+		},
 		{ id: 'tags', accessorKey: 'tags', header: '标签' },
 		{
 			id: 'published',

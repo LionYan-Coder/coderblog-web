@@ -30,9 +30,13 @@ export function useNotebookApi() {
 	}
 
 	async function fetchUpdateNotebook(id: number, params: UpdateNotebookReq) {
-		const { code, data, message } = await http('/admin/notebook/' + id, 'PUT', {
-			data: params
-		});
+		const { code, data, message } = await http(
+			'/admin/notebook/' + id,
+			'POST',
+			{
+				data: params
+			}
+		);
 		if (code !== EResponseCode.success) {
 			toast({
 				title: code + '',

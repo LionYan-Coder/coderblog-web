@@ -36,7 +36,8 @@ const formSchema = z.object({
 
 	summary: z.string().trim().max(120, '概要不能超过120个字符'),
 	tags: z.string().max(30, '标记不能超过30个字符'),
-	coverUrl: z.string().min(1, '缺少封面').url({ message: '地址不合法' })
+	coverUrl: z.string().min(1, '缺少封面').url({ message: '地址不合法' }),
+	content: z.string().trim()
 });
 
 interface EditBlogProps {
@@ -55,7 +56,7 @@ export function EditBlog({ article }: EditBlogProps) {
 	const [currentArticle, setCurrentArticle] = useState<Partial<Article>>({
 		...article
 	});
-	const { defaultValue, setValue, setDefaultValue } = useEditorState();
+	const { defaultValue, value, setDefaultValue } = useEditorState();
 	const [saveLoading, setSaveLoading] = useState(false);
 	const [publishLoading, setPublishLoading] = useState(false);
 	const form = useForm<z.infer<typeof formSchema>>({
@@ -64,7 +65,8 @@ export function EditBlog({ article }: EditBlogProps) {
 			title: currentArticle?.title || '',
 			summary: currentArticle?.summary || '',
 			tags: currentArticle?.tags?.join(',') || '',
-			coverUrl: currentArticle?.coverUrl || ''
+			coverUrl: currentArticle?.coverUrl || '',
+			content: currentArticle?.content || ''
 		}
 	});
 
@@ -101,6 +103,10 @@ export function EditBlog({ article }: EditBlogProps) {
 		}));
 	}
 
+	function handleChangeContent(content: string) {
+		form.setValue('content', content);
+	}
+
 	useEffect(() => {
 		if (article?.content) {
 			setDefaultValue(article?.content);
@@ -112,7 +118,7 @@ export function EditBlog({ article }: EditBlogProps) {
 			<StickyHeader className="flex items-center gap-4 mb-4">
 				<BackButton />
 				<h1 className="text-xl font-semibold tracking-tight whitespace-nowrap">
-					{currentArticle?.id ? currentArticle.title : '新建博客'}
+					{currentArticle?.id ? form.getValues().title : '新建博客'}
 				</h1>
 				<BadgeStatus
 					published={currentArticle?.published}
@@ -248,7 +254,10 @@ export function EditBlog({ article }: EditBlogProps) {
 						<Card.Content>
 							<MilkdownProvider>
 								<ProsemirrorAdapterProvider>
-									<MarkdownEditor value={defaultValue} />
+									<MarkdownEditor
+										onChange={handleChangeContent}
+										value={defaultValue}
+									/>
 								</ProsemirrorAdapterProvider>
 							</MilkdownProvider>
 						</Card.Content>

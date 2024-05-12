@@ -30,7 +30,7 @@ export function useArticleApi() {
 	}
 
 	async function fetchUpdateArticle(id: number, params: UpdateArticleReq) {
-		const { code, data, message } = await http('/admin/article/' + id, 'PUT', {
+		const { code, data, message } = await http('/admin/article/' + id, 'POST', {
 			data: params
 		});
 		if (code !== EResponseCode.success) {

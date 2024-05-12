@@ -21,7 +21,7 @@ export function UploadImage({
 	onUploadStart,
 	onUploadComplete
 }: UploadImageProps) {
-	const { getToken } = useAuth();
+	const { userId, getToken } = useAuth();
 	const [loading, setLoading] = useState(false);
 	const [uploadProgress, setUploadProgress] = useState(0);
 	const [imageUrl, setImageUrl] = useState<string>(value || '');
@@ -38,9 +38,9 @@ export function UploadImage({
 			formData.append('file', file);
 
 			const xhr = new XMLHttpRequest();
-			const token = `Bearer ${await getToken()}` || '';
 			xhr.open('POST', process.env.NEXT_PUBLIC_API_URL + '/admin/upload', true);
-			xhr.setRequestHeader(Authorization, token);
+			xhr.setRequestHeader('UserId', userId || '');
+			xhr.setRequestHeader(Authorization, `Bearer ${await getToken()}`);
 			xhr.upload.addEventListener('progress', (event) => {
 				if (event.lengthComputable) {
 					const percentComplete = (event.loaded / event.total) * 100;

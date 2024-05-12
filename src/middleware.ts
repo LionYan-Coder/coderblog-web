@@ -1,7 +1,7 @@
 import { authMiddleware } from '@clerk/nextjs';
 
 export default authMiddleware({
-	publicRoutes: ['/', '/blog(.*)', '/note(.*)', '/guestbook(.*)'],
+	publicRoutes: ['/', '/blog(.*)', '/notebook(.*)', '/mailbox(.*)'],
 	ignoredRoutes: ['/favicon.ico']
 });
 

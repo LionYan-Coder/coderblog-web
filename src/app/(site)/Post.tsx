@@ -1,7 +1,6 @@
 import { EResponseCode } from '~/config/enum';
 import http from '~/http';
 import { RecentBlogArticles } from './blog/BlogArticles';
-import { PencilSwooshIcon } from '~/assets';
 
 async function fetchArticles() {
 	const { data, code } = await http<ArticleListRes, ArticleListReq>(
@@ -17,17 +16,12 @@ async function fetchArticles() {
 
 export default async function Post() {
 	const articles = await fetchArticles();
-	return (
-		<div>
-			<p className="text-sm font-semibold mb-10 text-zinc-800 dark:text-zinc-200 flex items-center">
-				<PencilSwooshIcon className="mr-2 text-xl" />
-				近期文章
-			</p>
-			{articles && articles.length > 0 ? (
-				<RecentBlogArticles articles={articles || []} />
-			) : (
-				<p className="mb-2  text-muted-foreground">暂无博客...</p>
-			)}
+	return articles && articles.length > 0 ? (
+		<div className="relative sm:pb-12 sm:ml-[calc(2rem+1px)] md:ml-[calc(3.5rem+1px)] lg:ml-[max(calc(14.5rem+1px),calc(100%-50rem))]">
+			<div className="hidden absolute top-3 bottom-0 right-full mr-7 md:mr-[3.25rem] w-px bg-slate-200 dark:bg-slate-800 sm:block"></div>
+			<RecentBlogArticles articles={articles || []} />
 		</div>
+	) : (
+		<p className="mb-2  text-muted-foreground">暂无博客...</p>
 	);
 }

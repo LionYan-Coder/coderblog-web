@@ -29,7 +29,7 @@ export default function Resume() {
 			variants={variants}
 			initial="initial"
 			animate="animate"
-			className="relative w-full flex flex-col gap-4 pt-10 text-2xl h-[calc(100vh-var(--header-height))]"
+			className="relative w-full flex flex-col gap-4 pt-10 text-2xl  h-[calc(80vh-var(--header-height))] lg:h-[calc(100vh-var(--header-height))]"
 		>
 			<motion.p variants={variantItm}>
 				👋你好，我是
@@ -43,9 +43,9 @@ export default function Resume() {
 					className="text-2xl font-medium"
 					sequence={[
 						300,
-						'一名全栈开发工程师 。',
+						'一名前端开发工程师。',
 						2000,
-						'A Full Stack <Developer /> .',
+						'A Front-end <Developer /> .',
 						5000
 					]}
 					speed={10}
