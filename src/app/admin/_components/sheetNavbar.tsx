@@ -24,8 +24,8 @@ export function SheetNavbar() {
 					<Link href="#" className="mb-5">
 						<Image
 							className="rounded-full bg-zinc-100 object-cover dark:bg-zinc-800"
-							src={GITHUB.DEFAULLT_AVATAR}
-							alt={GITHUB.DEFAULLT_NAME}
+							src={GITHUB.DEFAULT_AVATAR}
+							alt={GITHUB.DEFAULT_NAME}
 							width={64}
 							height={64}
 							priority

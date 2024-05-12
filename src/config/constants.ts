@@ -4,6 +4,6 @@ export const ImgUrl = 'https://picsum.photos';
 export const DOMAIN = 'Lionblog';
 export const GITHUB = {
 	API_URL: 'https://api.github.com',
-	DEFAULLT_NAME: 'Lion Yan',
-	DEFAULLT_AVATAR: '/avatar_transparent.png'
+	DEFAULT_NAME: 'Lion Yan',
+	DEFAULT_AVATAR: '/avatar_transparent.png'
 };

@@ -91,8 +91,8 @@ export function ResizableLayout({
 					<Button className="w-10 h-10 relative" size="icon" variant="outline">
 						<Image
 							className="h-full object-cover"
-							src={GITHUB.DEFAULLT_AVATAR}
-							alt={GITHUB.DEFAULLT_NAME}
+							src={GITHUB.DEFAULT_AVATAR}
+							alt={GITHUB.DEFAULT_NAME}
 							width={40}
 							height={40}
 							priority

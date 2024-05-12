@@ -23,10 +23,10 @@ export default async function GitHubUser() {
 
 	return (
 		<Image
-			src={GITHUB.DEFAULLT_AVATAR}
+			src={GITHUB.DEFAULT_AVATAR}
 			width={40}
 			height={40}
-			alt={GITHUB.DEFAULLT_NAME}
+			alt={GITHUB.DEFAULT_NAME}
 		></Image>
 	);
 }
