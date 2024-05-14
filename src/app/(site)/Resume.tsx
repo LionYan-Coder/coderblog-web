@@ -29,18 +29,18 @@ export default function Resume() {
 			variants={variants}
 			initial="initial"
 			animate="animate"
-			className="relative w-full flex flex-col gap-4 pt-10 text-2xl  h-[calc(80vh-var(--header-height))] lg:h-[calc(100vh-var(--header-height))]"
+			className="relative w-full flex flex-col gap-4 pt-10 text-4xl sm:text-5xl  h-[calc(100vh-var(--header-height))]"
 		>
-			<motion.p variants={variantItm}>
-				👋你好，我是
-				<span className="text-amber-800 text-3xl font-semibold dark:drop-shadow-[0_0_0.3rem_#92400E70]">
-					{' '}
-					Lion
-				</span>
+			<motion.p variants={variantItm}>你好，我是</motion.p>
+			<motion.p
+				variants={variantItm}
+				className="text-amber-800 text-5xl sm:text-6xl font-semibold dark:drop-shadow-[0_0_0.3rem_#92400E70]"
+			>
+				Lion
 			</motion.p>
 			<motion.p className="group" variants={variantItm}>
 				<TypeAnimation
-					className="text-2xl font-medium"
+					className="text-2xl sm:text-3xl font-medium"
 					sequence={[
 						300,
 						'一名前端开发工程师。',
@@ -52,7 +52,10 @@ export default function Resume() {
 					repeat={Infinity}
 				/>
 			</motion.p>
-			<motion.p className="font-semibold" variants={variantItm}>
+			<motion.p
+				className="font-semibold text-3xl sm:text-4xl"
+				variants={variantItm}
+			>
 				热爱编码，喜欢{' '}
 				<span className="text-[#0871A4]  dark:drop-shadow-[0_0_0.3rem_#0871A470]">
 					React、
